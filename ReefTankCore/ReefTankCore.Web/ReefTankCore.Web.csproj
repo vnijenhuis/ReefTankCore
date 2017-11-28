@@ -19,6 +19,10 @@
     <Folder Include="Areas\Corals\Data\" />
     <Folder Include="Areas\Corals\Models\" />
     <Folder Include="Areas\Corals\Views\" />
+    <Folder Include="Areas\Inhabitants\Controllers\" />
+    <Folder Include="Areas\Inhabitants\Data\" />
+    <Folder Include="Areas\Inhabitants\Models\" />
+    <Folder Include="Areas\Inhabitants\Views\" />
   </ItemGroup>
 
   <ItemGroup>

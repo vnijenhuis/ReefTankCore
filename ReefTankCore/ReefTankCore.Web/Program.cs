@@ -24,7 +24,7 @@ namespace ReefTankCore.Web
                 try
                 {
                     var context = services.GetRequiredService<ReefContext>();
-                    //DbInitializer.Initialize(context);
+                    DbInitializer.Initialize(context);
                 }
                 catch (Exception e)
                 {
