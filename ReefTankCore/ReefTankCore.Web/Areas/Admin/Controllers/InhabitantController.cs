@@ -26,5 +26,56 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
             var vm = Mapper.Map<IEnumerable<Category>, IList<CategoryViewModel>>(categories);
             return View(vm);
         }
+
+        public IActionResult GetSubcategories(Guid id)
+        {
+            var category = _reefService.GetCategory(id);
+            var subcategories = _reefService.GetSubcategories(category);
+            
+            return null;
+        }
+
+        public IActionResult GetInhabitants(Guid id)
+        {
+            var subcategory = _reefService.GetSubcategory(id);
+            var inhabitants = _reefService.GetInhabitantsBySubcategory(subcategory);
+
+            return null;
+        }
+
+        public IActionResult Details(Guid id)
+        {
+            var inhabitant = _reefService.GetInhabitant(id);
+            return null;
+        }
+
+        public IActionResult Edit(Guid id)
+        {
+            var inhabitant = _reefService.GetInhabitant(id);
+            return null;
+        }
+
+        [HttpPost]
+        public IActionResult Edit()
+        {
+            return null;
+        }
+
+        public IActionResult New()
+        {
+            return null;
+        }
+
+        public IActionResult Delete(Guid id)
+        {
+            var inhabitant = _reefService.GetInhabitant(id);
+            return null;
+        }
+
+        [HttpDelete]
+        public IActionResult Delete()
+        {
+            return null;
+        }
     }
 }
