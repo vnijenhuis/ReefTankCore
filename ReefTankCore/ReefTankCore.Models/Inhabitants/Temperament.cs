@@ -1,10 +1,22 @@
-﻿namespace ReefTankCore.Models.Inhabitants
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ReefTankCore.Models.Inhabitants
 {
     public enum Temperament
     {
-        Docile = 0,
-        Peaceful = 1,
-        SemiAgressive = 2,
-        Agressive = 3,
+        [Display(Name = "Unknown")]
+        Unknown = 0,
+
+        [Display(Name = "Docile")]
+        Docile = 1,
+
+        [Display(Name = "Peaceful")]
+        Peaceful = 2,
+
+        [Display(Name = "Semi-aggressive")]
+        SemiAgressive = 3,
+
+        [Display(Name = "Aggressive")]
+        Agressive = 4,
     }
 }

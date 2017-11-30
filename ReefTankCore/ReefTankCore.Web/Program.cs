@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using ReefTankCore.Services;
+using ReefTankCore.Services.Context;
 using ReefTankCore.Web.Data;
 
 namespace ReefTankCore.Web
@@ -24,7 +26,7 @@ namespace ReefTankCore.Web
                 try
                 {
                     var context = services.GetRequiredService<ReefContext>();
-                    //DbInitializer.Initialize(context);
+                    DbInitializer.Initialize(context);
                 }
                 catch (Exception e)
                 {

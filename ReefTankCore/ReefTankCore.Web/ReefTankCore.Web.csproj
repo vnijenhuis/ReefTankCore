@@ -5,6 +5,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Corals\**" />
+    <Compile Remove="Areas\Inhabitants\**" />
+    <Content Remove="Areas\Corals\**" />
+    <Content Remove="Areas\Inhabitants\**" />
+    <EmbeddedResource Remove="Areas\Corals\**" />
+    <EmbeddedResource Remove="Areas\Inhabitants\**" />
+    <None Remove="Areas\Corals\**" />
+    <None Remove="Areas\Inhabitants\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\IReefService.cs" />
+    <Compile Remove="Data\ReefService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="6.2.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
@@ -15,14 +33,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Corals\Controllers\" />
-    <Folder Include="Areas\Corals\Data\" />
-    <Folder Include="Areas\Corals\Models\" />
-    <Folder Include="Areas\Corals\Views\" />
+    <ProjectReference Include="..\ReefTankCore.Models\ReefTankCore.Models.csproj" />
+    <ProjectReference Include="..\ReefTankCore.Services\ReefTankCore.Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ReefTankCore.Models\ReefTankCore.Models.csproj" />
-  </ItemGroup>
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JSONSchema="http://json.schemastore.org/band-manifest" /></VisualStudio></ProjectExtensions>
 
 </Project>

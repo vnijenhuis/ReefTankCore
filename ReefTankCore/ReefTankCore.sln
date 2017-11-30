@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReefTankCore.Web", "ReefTankCore.Web\ReefTankCore.Web.csproj", "{1BB6FB79-69BE-4300-8C6C-1839E77F75E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReefTankCore.Web", "ReefTankCore.Web\ReefTankCore.Web.csproj", "{1BB6FB79-69BE-4300-8C6C-1839E77F75E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReefTankCore.Models", "ReefTankCore.Models\ReefTankCore.Models.csproj", "{C58BA06A-B181-4F53-B7FB-C888D0737E94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReefTankCore.Models", "ReefTankCore.Models\ReefTankCore.Models.csproj", "{C58BA06A-B181-4F53-B7FB-C888D0737E94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReefTankCore.Core", "ReefTankCore.Core\ReefTankCore.Core.csproj", "{3B3E727C-085D-48B5-8FF2-E037179BB5D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReefTankCore.Core", "ReefTankCore.Core\ReefTankCore.Core.csproj", "{3B3E727C-085D-48B5-8FF2-E037179BB5D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReefTankCore.Services", "ReefTankCore.Services\ReefTankCore.Services.csproj", "{90DB0041-633E-42BE-A619-ED94781D891D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReefTankCore.Services", "ReefTankCore.Services\ReefTankCore.Services.csproj", "{BF1A3A30-7F6D-4785-AB28-68E54EFF6B12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{3B3E727C-085D-48B5-8FF2-E037179BB5D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B3E727C-085D-48B5-8FF2-E037179BB5D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B3E727C-085D-48B5-8FF2-E037179BB5D1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{90DB0041-633E-42BE-A619-ED94781D891D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{90DB0041-633E-42BE-A619-ED94781D891D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{90DB0041-633E-42BE-A619-ED94781D891D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{90DB0041-633E-42BE-A619-ED94781D891D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF1A3A30-7F6D-4785-AB28-68E54EFF6B12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF1A3A30-7F6D-4785-AB28-68E54EFF6B12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF1A3A30-7F6D-4785-AB28-68E54EFF6B12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF1A3A30-7F6D-4785-AB28-68E54EFF6B12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
