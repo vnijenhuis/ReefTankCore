@@ -1,0 +1,29 @@
+﻿@model IList<ReefTankCore.Web.Models.CategoryViewModel>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>title</h2>
+<div class="container">
+    @for (var i = 0; i < Model.Count(); i += 3)
+    {
+        if (i > Model.Count())
+        {
+            i = Model.Count();
+        }
+        <div class="row">
+            @{
+                var j = 0;
+                for (; j <= 2 && i + j < Model.Count(); j++)
+                {             
+                    <div class="col-md-4">
+                        <div class="category">@Model[i + j].Name</div>
+                    </div>
+                }
+            }
+
+        </div>
+    }
+</div>

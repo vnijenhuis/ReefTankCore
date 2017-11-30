@@ -18,7 +18,7 @@ namespace ReefTankCore.Models.Base
 
         public string ScientificName { get; set; }
 
-        public ICollection<Genus> Genera { get; set; }
+        public ICollection<Creature> Creatures { get; set; }
         
         public virtual string Description { get; set; }
     }

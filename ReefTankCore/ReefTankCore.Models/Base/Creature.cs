@@ -12,7 +12,9 @@ namespace ReefTankCore.Models.Base
 
         public string Description { get; set; }
 
-        public Genus Genus { get; set; }
+        public Subcategory Subcategory { get; set; }
+
+        public string Genus { get; set; }
 
         public string Species { get; set; }
 
@@ -22,7 +24,7 @@ namespace ReefTankCore.Models.Base
         {
             get
             {
-                var fullName = Genus.Name;
+                var fullName = Genus;
                 fullName += " " + Species;
                 return fullName;
             }

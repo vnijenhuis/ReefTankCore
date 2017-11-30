@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using ReefTank.Models.Base;
 using ReefTankCore.Models.Base;
 using ReefTankCore.Models.Corals;
 using ReefTankCore.Models.Inhabitants;
 
-namespace ReefTankCore.Web.Data
+namespace ReefTankCore.Services.Context
 {
     public class ReefContext : DbContext
     {
@@ -23,7 +20,6 @@ namespace ReefTankCore.Web.Data
         {
             modelBuilder.Entity<Inhabitant>().ToTable("Inhabitant");
             modelBuilder.Entity<Coral>().ToTable("Coral");
-            modelBuilder.Entity<Genus>().ToTable("Genus");
             modelBuilder.Entity<Category>().ToTable("Category");
             modelBuilder.Entity<Subcategory>().ToTable("Subcategory");
             modelBuilder.Entity<Tag>().ToTable("Tag");
@@ -34,9 +30,13 @@ namespace ReefTankCore.Web.Data
         public DbSet<Coral> Corals { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Subcategory> Subcategories { get; set; }
-        public DbSet<Genus> Genera { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Reference> References { get; set; }
+
+        public IEnumerable<Inhabitant> GetInhabitants()
+        {
+            return Inhabitants;
+        }
 
     }
 }

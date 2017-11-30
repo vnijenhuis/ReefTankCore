@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using ReefTankCore.Models.Base;
 using ReefTankCore.Models.Inhabitants;
+using ReefTankCore.Services;
+using ReefTankCore.Services.Context;
 
 namespace ReefTankCore.Web.Data
 {
@@ -13,11 +12,35 @@ namespace ReefTankCore.Web.Data
         {
             context.Database.EnsureCreated();
 
-            // Look for any students.
-            //if (context.Categories.Any())
-            //{
-            //    return;   // DB has been seeded
-            //}
+            //foreach (var entity in context.References)
+            //    context.References.Remove(entity);
+            //context.SaveChanges();
+
+            //foreach (var entity in context.Tags)
+            //    context.Tags.Remove(entity);
+            //context.SaveChanges();
+
+            //foreach (var entity in context.Inhabitants)
+            //    context.Inhabitants.Remove(entity);
+            //context.SaveChanges();
+
+            //foreach (var entity in context.Corals)
+            //    context.Corals.Remove(entity);
+            //context.SaveChanges();
+
+            //foreach (var entity in context.Subcategories)
+            //    context.Subcategories.Remove(entity);
+            //context.SaveChanges();
+
+            //foreach (var entity in context.Categories)
+            //    context.Categories.Remove(entity);
+            //context.SaveChanges();
+
+
+            if (context.Categories.Any())
+            {
+                return;   // DB has been seeded
+            }
 
             var categories = new[]
             {
@@ -447,19 +470,12 @@ namespace ReefTankCore.Web.Data
             {
                 context.Subcategories.Add(subcategory);
             }
-            var genus = new Genus()
-            {
-                Subcategory = fish[0],
-                Name = "Chrysiptera",
-            };
-
-            context.Genera.Add(genus);
 
             var creatures = new[]
            {
                 new Inhabitant()
                 {
-                    Genus = genus,
+                    Genus = "Chrysiptera",
                     Species = "hemicyanea",
                     CommonName = "Azure Damselfish",
                     Description = "The Damselfish, also known as the Half-blue Damselfish, is a two-tone, darting marine fish. The front portion of the body is bright blue. The posterior portion, anal fin, and tail are yellow. There is a species variation in the amount of yellow on the body of the fish. (Some call C. parasema the Azure Damselfish, however, in the aquarium trade, the Azure Damselfish is considered to be this fish, C. hemicyanea.)" +
@@ -475,7 +491,7 @@ namespace ReefTankCore.Web.Data
                 },
                 new Inhabitant()
                 {
-                    Genus = genus,
+                    Genus = "Chrysiptera",
                     Species = "cyanea",
                     CommonName = "Blue Damselfish",
                     Description = "The Blue Damselfish is probably the best selling marine fish in the United States. Beginning hobbyists relish its hardiness and small size, while advanced aquarists praise the color and activity this member of the Pomacentridae family brings to the aquarium. Female Blue Damselfish are completely blue. Males, on the other hand, have an orange tail and are commonly called the Orangetail Blue Damselfish or Blue Devil Damselfish." +
@@ -492,7 +508,7 @@ namespace ReefTankCore.Web.Data
                 },
                 new Inhabitant()
                 {
-                    Genus = genus,
+                    Genus = "Chrysiptera",
                     Species = "springeri",
                     CommonName = "Blue Sapphire Damselfish",
                     Description = "The Blue Sapphire Damselfish originates within the Solomon Islands, and is a brilliant blue coloration with black outlined fins. This species can quickly turn completely black when stressed which allows them to evade predators. Like many of the other damselfish within the Chrysiptera genus, it can become aggressive towards slower moving tank mates. Be sure the aquarium has plenty of live rock for territories and hiding." +
@@ -508,7 +524,7 @@ namespace ReefTankCore.Web.Data
                 },
                 new Inhabitant()
                 {
-                    Genus = genus,
+                    Genus = "Chrysiptera",
                     Species = "springeri",
                     CommonName = "Fiji Blue Devil Damselfish",
                     Description = "Fiji Blue Devil Damselfish, also known as the South Seas Devil Damselfish or Village Belle, is blue with a yellow belly. " +
@@ -526,7 +542,7 @@ namespace ReefTankCore.Web.Data
 
             var a = new Inhabitant()
             {
-                Genus = genus,
+                Genus = "Chrysiptera",
                 Species = "parasema",
                 CommonName = "Yellowtail Damselfish",
                 Description =
