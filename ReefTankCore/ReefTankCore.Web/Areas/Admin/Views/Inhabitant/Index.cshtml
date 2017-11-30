@@ -5,7 +5,7 @@
     Layout = "_Layout";
 }
 
-<h2>title</h2>
+<h2>Marine Inhabitants</h2>
 <div class="container">
     @for (var i = 0; i < Model.Count(); i += 3)
     {
@@ -17,9 +17,12 @@
             @{
                 var j = 0;
                 for (; j <= 2 && i + j < Model.Count(); j++)
-                {             
+                {
+                    var category = @Model[i + j];
                     <div class="col-md-4">
-                        <div class="category">@Model[i + j].Name</div>
+                        <div class="category">
+                            <a href="@Url.Action("GetSubcategories","Inhabitant", new {Area = "Admin", id = category.Id })">@category.Name</a>
+                        </div>
                     </div>
                 }
             }
