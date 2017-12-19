@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using ReefTankCore.Models.Base;
-using ReefTankCore.Models.Inhabitants;
-using ReefTankCore.Services;
+using ReefTankCore.Models.Enums;
 using ReefTankCore.Services.Context;
 
 namespace ReefTankCore.Web.Data
@@ -10,31 +12,27 @@ namespace ReefTankCore.Web.Data
     {
         public static void Initialize(ReefContext context)
         {
+            foreach (var entity in context.References)
+                context.References.Remove(entity);
+            context.SaveChanges();
+
+            foreach (var entity in context.Tags)
+                context.Tags.Remove(entity);
+            context.SaveChanges();
+
+            foreach (var entity in context.Creatures)
+                context.Creatures.Remove(entity);
+            context.SaveChanges();
+
+            foreach (var entity in context.Subcategories)
+                context.Subcategories.Remove(entity);
+            context.SaveChanges();
+
+            foreach (var entity in context.Categories)
+                context.Categories.Remove(entity);
+            context.SaveChanges();
+
             context.Database.EnsureCreated();
-
-            //foreach (var entity in context.References)
-            //    context.References.Remove(entity);
-            //context.SaveChanges();
-
-            //foreach (var entity in context.Tags)
-            //    context.Tags.Remove(entity);
-            //context.SaveChanges();
-
-            //foreach (var entity in context.Inhabitants)
-            //    context.Inhabitants.Remove(entity);
-            //context.SaveChanges();
-
-            //foreach (var entity in context.Corals)
-            //    context.Corals.Remove(entity);
-            //context.SaveChanges();
-
-            //foreach (var entity in context.Subcategories)
-            //    context.Subcategories.Remove(entity);
-            //context.SaveChanges();
-
-            //foreach (var entity in context.Categories)
-            //    context.Categories.Remove(entity);
-            //context.SaveChanges();
 
 
             if (context.Categories.Any())
@@ -44,17 +42,21 @@ namespace ReefTankCore.Web.Data
 
             var categories = new[]
             {
-                new Category() {Name = "Crustaceans"},
-                new Category() {Name = "Echinoderms"},
-                new Category() {Name = "Fish"},
-                new Category() {Name = "Molluscs"},
-                new Category() {Name = "Corals"},
+                new Category() {Name = "Aquaria", Slug = "aquaria"},
+                new Category() {Name = "Bivalves", Slug = "bivalves"},
+                new Category() {Name = "Crustaceans", Slug = "crustaceans"},
+                new Category() {Name = "Echinoderms", Slug = "echinoderms"},
+                new Category() {Name = "Fish", Slug = "fish"},
+                new Category() {Name = "Molluscs", Slug = "molluscs"},
+                new Category() {Name = "Corals", Slug = "corals"},
             };
 
             foreach (var category in categories)
             {
                 context.Categories.Add(category);
             }
+
+            #region Tags
 
             var tags = new[]
             {
@@ -286,11 +288,15 @@ namespace ReefTankCore.Web.Data
                 context.Tags.Add(warning);
             }
 
+            #endregion
+
+            #region Subs
+
             var crustaceans = new[]
                 {
                 new Subcategory()
                 {
-                    Category = categories[0],
+                    Category = categories.First(x => x.Slug == "crustaceans"),
                     Description = "",
                     CommonName = "Hermit crabs",
                     ScientificName = "Paguroidea",
@@ -298,7 +304,7 @@ namespace ReefTankCore.Web.Data
                 },
                 new Subcategory()
                 {
-                    Category = categories[0],
+                    Category = categories.First(x => x.Slug == "crustaceans"),
                     Description = "",
                     CommonName = "Spider crabs",
                     ScientificName = "Majoidea",
@@ -306,7 +312,7 @@ namespace ReefTankCore.Web.Data
                 },
                 new Subcategory()
                 {
-                    Category = categories[0],
+                    Category = categories.First(x => x.Slug == "crustaceans"),
                     Description = "",
                     CommonName = "Shrimps",
                     ScientificName = "Caridea",
@@ -314,7 +320,7 @@ namespace ReefTankCore.Web.Data
                 },
                 new Subcategory()
                 {
-                    Category = categories[0],
+                    Category = categories.First(x => x.Slug == "crustaceans"),
                     Description = "",
                     CommonName = "Mantis shrimp",
                     ScientificName = "Stomatopoda",
@@ -326,7 +332,7 @@ namespace ReefTankCore.Web.Data
             {
                 new Subcategory()
                 {
-                    Category = categories[1],
+                    Category = categories.First(x => x.Slug == "echinoderms"),
                     Description = "",
                     CommonName = "Sea cucumbers",
                     ScientificName = "Holothuroidea",
@@ -334,7 +340,7 @@ namespace ReefTankCore.Web.Data
                 },
                 new Subcategory()
                 {
-                    Category = categories[1],
+                    Category = categories.First(x => x.Slug == "echinoderms"),
                     Description = "",
                     CommonName = "Sea stars",
                     ScientificName = "Asteroidea",
@@ -342,7 +348,7 @@ namespace ReefTankCore.Web.Data
                 },
                 new Subcategory()
                 {
-                    Category = categories[1],
+                    Category = categories.First(x => x.Slug == "echinoderms"),
                     Description = "",
                     CommonName = "Sea urchins",
                     ScientificName = "Echinoidea",
@@ -354,7 +360,7 @@ namespace ReefTankCore.Web.Data
             {
                 new Subcategory()
                 {
-                    Category = categories[2],
+                    Category = categories.First(x => x.Slug == "fish"),
                     Description = "",
                     CommonName = "Clownfish/Damselfish",
                     ScientificName = "Pomacentridae",
@@ -362,7 +368,7 @@ namespace ReefTankCore.Web.Data
                 },
                 new Subcategory()
                 {
-                    Category = categories[2],
+                    Category = categories.First(x => x.Slug == "fish"),
                     Description = "",
                     CommonName = "Cardinalfish",
                     ScientificName = "Apogonidae",
@@ -370,7 +376,7 @@ namespace ReefTankCore.Web.Data
                 },
                 new Subcategory()
                 {
-                    Category = categories[2],
+                    Category = categories.First(x => x.Slug == "fish"),
                     Description = "",
                     CommonName = "Surgeonfish (Tang)",
                     ScientificName = "Acanthuridae",
@@ -378,7 +384,7 @@ namespace ReefTankCore.Web.Data
                 },
                 new Subcategory()
                 {
-                    Category = categories[2],
+                    Category = categories.First(x => x.Slug == "fish"),
                     Description = "",
                     CommonName = "Butterflyfish",
                     ScientificName = "Chaetodontidae",
@@ -386,7 +392,7 @@ namespace ReefTankCore.Web.Data
                 },
                 new Subcategory()
                 {
-                    Category = categories[2],
+                    Category = categories.First(x => x.Slug == "fish"),
                     Description = "",
                     CommonName = "Angelfish",
                     ScientificName = "Pomacanthidae",
@@ -394,7 +400,7 @@ namespace ReefTankCore.Web.Data
                 },
                 new Subcategory()
                 {
-                    Category = categories[2],
+                    Category = categories.First(x => x.Slug == "fish"),
                     Description = "",
                     CommonName = "Goby",
                     ScientificName = "Gobiidae",
@@ -406,7 +412,7 @@ namespace ReefTankCore.Web.Data
             {
                 new Subcategory()
                 {
-                    Category = categories[3],
+                    Category = categories.First(x => x.Slug == "molluscs"),
                     Description = "",
                     CommonName = "Sea snails",
                     ScientificName = "Gastropoda",
@@ -414,7 +420,7 @@ namespace ReefTankCore.Web.Data
                 },
                 new Subcategory()
                 {
-                    Category = categories[3],
+                    Category = categories.First(x => x.Slug == "molluscs"),
                     Description = "",
                     CommonName = "Nudibranch",
                     ScientificName = "Nudibranchia",
@@ -426,7 +432,7 @@ namespace ReefTankCore.Web.Data
             {
                 new Subcategory()
                 {
-                    Category = categories[4],
+                    Category = categories.First(x => x.Slug == "corals"),
                     Description = "",
                     CommonName = "Soft Corals",
                     ScientificName = "Alcyonacea",
@@ -434,7 +440,7 @@ namespace ReefTankCore.Web.Data
                 },
                 new Subcategory()
                 {
-                    Category = categories[4],
+                    Category = categories.First(x => x.Slug == "corals"),
                     Description = "",
                     CommonName = "Stony Corals",
                     ScientificName = "Scleractinia",
@@ -442,7 +448,7 @@ namespace ReefTankCore.Web.Data
                 },
                 new Subcategory()
                 {
-                    Category = categories[4],
+                    Category = categories.First(x => x.Slug == "corals"),
                     Description = "",
                     CommonName = "Sea anemones",
                     ScientificName = "Actiniaria ",
@@ -471,9 +477,11 @@ namespace ReefTankCore.Web.Data
                 context.Subcategories.Add(subcategory);
             }
 
+            #endregion
+
             var creatures = new[]
            {
-                new Inhabitant()
+                new Creature()
                 {
                     Genus = "Chrysiptera",
                     Species = "hemicyanea",
@@ -487,9 +495,11 @@ namespace ReefTankCore.Web.Data
                     ReefCompatability = ReefCompatability.Always,
                     Temperament = Temperament.SemiAgressive,
                     Volume = 125,
+                    Difficulty = Difficulty.Beginner,
                     Diet = "Omnivore",
+                    Subcategory = fish.First(x => x.Slug == "damselfish")
                 },
-                new Inhabitant()
+                new Creature()
                 {
                     Genus = "Chrysiptera",
                     Species = "cyanea",
@@ -504,9 +514,11 @@ namespace ReefTankCore.Web.Data
                     ReefCompatability = ReefCompatability.Always,
                     Temperament = Temperament.SemiAgressive,
                     Volume = 125,
+                    Difficulty = Difficulty.Beginner,
                     Diet = "Omnivore",
+                    Subcategory = fish.First(x => x.Slug == "damselfish")
                 },
-                new Inhabitant()
+                new Creature()
                 {
                     Genus = "Chrysiptera",
                     Species = "springeri",
@@ -520,9 +532,11 @@ namespace ReefTankCore.Web.Data
                     ReefCompatability = ReefCompatability.Always,
                     Temperament = Temperament.Peaceful,
                     Volume = 125,
+                    Difficulty = Difficulty.Beginner,
                     Diet = "Carnivore",
+                    Subcategory = fish.First(x => x.Slug == "damselfish")
                 },
-                new Inhabitant()
+                new Creature()
                 {
                     Genus = "Chrysiptera",
                     Species = "springeri",
@@ -536,11 +550,13 @@ namespace ReefTankCore.Web.Data
                     ReefCompatability = ReefCompatability.Always,
                     Temperament = Temperament.Peaceful,
                     Volume = 125,
+                    Difficulty = Difficulty.Beginner,
                     Diet = "Carnivore",
+                    Subcategory = fish.First(x => x.Slug == "damselfish")
                 },
             };
 
-            var a = new Inhabitant()
+            var a = new Creature()
             {
                 Genus = "Chrysiptera",
                 Species = "parasema",
@@ -555,14 +571,18 @@ namespace ReefTankCore.Web.Data
                 ReefCompatability = ReefCompatability.Always,
                 Temperament = Temperament.SemiAgressive,
                 Volume = 125,
+                Difficulty = Difficulty.Beginner,
                 Diet = "Omnivore",
+                Subcategory = fish.First(x => x.Slug == "damselfish")
             };
 
-            context.Inhabitants.Add(a);
+            context.Creatures.Add(a);
+
+            context.Media.Add(new Media() { CreatureId = a.Id });
 
             foreach (var inhabitant in creatures)
             {
-                context.Inhabitants.Add(inhabitant);
+                context.Creatures.Add(inhabitant);
             }
             context.SaveChanges();
         }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ReefTankCore.Models.Inhabitants
+namespace ReefTankCore.Models.Enums
 {
     public enum ReefCompatability
     {

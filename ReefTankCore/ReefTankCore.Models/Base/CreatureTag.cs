@@ -6,7 +6,7 @@ namespace ReefTankCore.Models.Base
 {
     public class CreatureTag
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public Guid TagId { get; set; }
         public Tag Tag { get; set; }

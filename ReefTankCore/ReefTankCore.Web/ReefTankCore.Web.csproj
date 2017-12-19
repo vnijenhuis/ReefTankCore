@@ -5,19 +5,35 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Admin\Views\Inhabitant\**" />
     <Compile Remove="Areas\Corals\**" />
     <Compile Remove="Areas\Inhabitants\**" />
+    <Compile Remove="Pages\**" />
+    <Compile Remove="Views\Home\Components\**" />
+    <Content Remove="Areas\Admin\Views\Inhabitant\**" />
     <Content Remove="Areas\Corals\**" />
     <Content Remove="Areas\Inhabitants\**" />
+    <Content Remove="Pages\**" />
+    <Content Remove="Views\Home\Components\**" />
+    <EmbeddedResource Remove="Areas\Admin\Views\Inhabitant\**" />
     <EmbeddedResource Remove="Areas\Corals\**" />
     <EmbeddedResource Remove="Areas\Inhabitants\**" />
+    <EmbeddedResource Remove="Pages\**" />
+    <EmbeddedResource Remove="Views\Home\Components\**" />
+    <None Remove="Areas\Admin\Views\Inhabitant\**" />
     <None Remove="Areas\Corals\**" />
     <None Remove="Areas\Inhabitants\**" />
+    <None Remove="Pages\**" />
+    <None Remove="Views\Home\Components\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Data\IReefService.cs" />
     <Compile Remove="Data\ReefService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Shared\Components\CategoryMenu\CategoryMenu.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,8 +49,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Pages\Components\CategoryMenu\CategoryMenu.cshtml" />
+    <None Include="Views\Shared\Components\CategoryMenu\CategoryMenu.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ReefTankCore.Models\ReefTankCore.Models.csproj" />
     <ProjectReference Include="..\ReefTankCore.Services\ReefTankCore.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JSONSchema="http://json.schemastore.org/band-manifest" /></VisualStudio></ProjectExtensions>

@@ -1,0 +1,150 @@
+﻿@model ReefTankCore.Web.Areas.Admin.Models.CreatureDetailsModel
+
+@{
+    ViewBag.Title = "Creature";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <div class="panel panel-info top-buffer">
+        <div class="panel-heading">
+            <a href="@Url.Action("Index", "Subcategory", new {Area = "Admin", Slug = Model.SubcategorySlug})"><i class="glyphicon glyphicon-chevron-left"></i> <strong>@Model.SubcategoryCommonName</strong></a>
+            <h2>Edit @Model.CommonName</h2>
+        </div>
+        <div class="panel-body">
+            @using (Html.BeginForm("Edit","Creature", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.HiddenFor(x => x.SubcategorySlug)
+                @Html.HiddenFor(x => x.CategorySlug)
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.CommonName)
+                            @Html.TextBoxFor(x => x.CommonName, new { Class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Genus)
+                            @Html.TextBoxFor(x => x.Genus, new { Class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Species)
+                            @Html.TextBoxFor(x => x.Species, new { Class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Logo</label>
+                        <img class="logo img-responsive img-thumbnail" id="creature" src="@Model.Logo" alt="Image" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Species)
+                            @Html.TextBoxFor(x => x.Species, new { Class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Upload Image</label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <span class="btn btn-default btn-file">
+                                        Browse… <input type="file" name="Logo" id="imgInp">
+                                    </span>
+                                </span>
+                                <input type="text" class="form-control" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Volume, "Minimum volume in liters")
+                            @Html.TextBoxFor(x => x.Volume, new { Class = "form-control", type = "number", min = 0, max = 10000 })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Length, "Average length")
+                            @Html.TextBoxFor(x => x.Length, new { Class = "form-control", type = "text", min = 0, max = 500 })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Diet)
+                            @Html.TextBoxFor(x => x.Diet, new { Class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Origin)
+                            @Html.TextBoxFor(x => x.Origin, new { Class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Temperament)
+                            @Html.TextBoxFor(x => x.Temperament, new { Class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Difficulty)
+                            @Html.TextBoxFor(x => x.Difficulty, new { Class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.SpecialRequirements)
+                            @Html.TextBoxFor(x => x.SpecialRequirements, new { Class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.ReefCompatability)
+                            @Html.TextBoxFor(x => x.ReefCompatability, new { Class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Description)
+                            @Html.TextAreaFor(x => x.Description, 15, 10, new { Class = "form-control desc-area" })
+                        </div>
+                    </div>
+                </div>
+
+                <input type="submit" class="btn btn-primary" />
+                <a href="@Url.Action("Index", "Subcategory", new {Area = "Admin", Slug = Model.SubcategorySlug})" class="btn btn-link">Annuleren</a>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script>
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#creature').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#imgInp").change(function () {
+            readURL(this);
+        });
+    </script>
+}

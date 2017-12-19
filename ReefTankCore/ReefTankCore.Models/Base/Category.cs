@@ -12,6 +12,6 @@ namespace ReefTankCore.Models.Base
 
         public string Slug { get; set; }
 
-        public ICollection<Subcategory> Subcategories { get; set; }
+        public virtual ICollection<Subcategory> Subcategories { get; set; }
     }
 }

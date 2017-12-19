@@ -1,28 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using ReefTankCore.Models.Base;
-using ReefTankCore.Models.Corals;
-using ReefTankCore.Models.Inhabitants;
 
 namespace ReefTankCore.Services.Context
 {
     public interface IReefService
     {
-        Inhabitant GetInhabitant(Guid id);
-        IEnumerable<Inhabitant> GetInhabitants();
-        IEnumerable<Inhabitant> GetInhabitantsByCategory(Category category);
-        IEnumerable<Inhabitant> GetInhabitantsBySubcategory(Subcategory subcategory);
-
-        Coral GetCoral(Guid id);
-        IEnumerable<Coral> GetCorals();
-        IEnumerable<Coral> GetCoralsByCategory(Category category);
-        IEnumerable<Coral> GetCoralsBySubcategory(Subcategory subcategory);
+        Creature GetCreature(Guid id);
+        IEnumerable<Creature> GetCreatures();
+        IEnumerable<Creature> GetCreaturesByCategory(Category category);
+        IEnumerable<Creature> GetCreaturesBySubcategory(Subcategory subcategory);
+        void SaveCreature(Creature creature);
 
         Category GetCategory(Guid id);
+        Category GetCategory(string slug);
         IEnumerable<Category> GetCategories();
 
         Subcategory GetSubcategory(Guid id);
+        Subcategory GetSubcategory(string slug);
+        IEnumerable<Subcategory> GetAllSubcategories();
         IEnumerable<Subcategory> GetSubcategories(Category category);
 
+        Subcategory GetFirstSubcategory();
+        Category GetFirstCategory();
+
+        void SaveMedia(Media media);
     }
 }

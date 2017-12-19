@@ -18,6 +18,6 @@ namespace ReefTank.Models.Base
 
         public DateTime DateLastUpdated { get; set; }
 
-        public ICollection<CreatureReference> CreatureReferences { get; set; }
+        public virtual  ICollection<CreatureReference> CreatureReferences { get; set; }
     }
 }

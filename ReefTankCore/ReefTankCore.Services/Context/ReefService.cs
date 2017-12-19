@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using ReefTankCore.Models.Base;
-using ReefTankCore.Models.Corals;
-using ReefTankCore.Models.Inhabitants;
-using ReefTankCore.Services.Context;
 
-namespace ReefTankCore.Services
+namespace ReefTankCore.Services.Context
 {
     public class ReefService : IReefService
     {
@@ -17,64 +16,160 @@ namespace ReefTankCore.Services
             _reefContext = reefContext;
         }
 
+        public Category GetCategory(string slug)
+        {
+            var category = _reefContext.Categories
+                .Include(x => x.Subcategories)
+                .FirstOrDefault(x => x.Slug == slug);
+
+            return category;
+        }
+
         public IEnumerable<Category> GetCategories()
         {
-            return _reefContext.Categories.ToList();
+            return _reefContext.Categories.Include(x => x.Subcategories);
         }
 
         public Subcategory GetSubcategory(Guid id)
         {
-            throw new NotImplementedException();
+            var subcategory = _reefContext.Subcategories.Find(id);
+            return subcategory;
         }
 
-        public IEnumerable<Coral> GetCoralsBySubcategory(Subcategory subcategory)
+        public Subcategory GetSubcategory(string slug)
         {
-            return _reefContext.Corals.Where(x => x.Subcategory.Id == subcategory.Id);
+            var subcategory = _reefContext.Subcategories.FirstOrDefault(x => x.Slug == slug);
+            LoadIntoSubcategory(subcategory);
+
+            return subcategory;
         }
 
+        public IEnumerable<Subcategory> GetAllSubcategories()
+        {
+            return _reefContext.Subcategories.Include(x => x.Creatures).Include(x => x.Category);
+        }
+
+        public void SaveCreature(Creature creature)
+        {
+            _reefContext.Creatures.Update(creature);
+            _reefContext.SaveChangesAsync();
+        }
+        
         public Category GetCategory(Guid id)
-        {
+        { 
             return _reefContext.Categories.Find(id);
         }
 
-        public IEnumerable<Inhabitant> GetInhabitants()
+        public IEnumerable<Creature> GetCreatures()
         {
-            return _reefContext.Inhabitants;
+            var creatures = _reefContext.Creatures;
+            LoadIntoCreatures(creatures);
+
+            return creatures;
         }
 
-        public Inhabitant GetInhabitant(Guid id)
+        public Creature GetCreature(Guid id)
         {
-            return _reefContext.Inhabitants.Find(id);
+            var creature = _reefContext.Creatures.Find(id);
+            LoadIntoCreature(creature);
+
+            return _reefContext.Creatures.Find(id);
         }
 
-        public IEnumerable<Inhabitant> GetInhabitantsByCategory(Category category)
+        public IEnumerable<Creature> GetCreaturesByCategory(Category category)
         {
-            return _reefContext.Inhabitants.Where(x => x.Subcategory.Category.Id == category.Id);
+            var creatures = _reefContext.Creatures.Where(x => x.Subcategory.Category.Id == category.Id);
+            LoadIntoCreatures(creatures);
+
+            return creatures;
         }
 
-        public IEnumerable<Inhabitant> GetInhabitantsBySubcategory(Subcategory subcategory)
+        public IEnumerable<Creature> GetCreaturesBySubcategory(Subcategory subcategory)
         {
-            return _reefContext.Inhabitants.Where(x => x.Subcategory.Id == subcategory.Id);
-        }
-
-        public Coral GetCoral(Guid id)
-        {
-            return _reefContext.Corals.Find(id);
-        }
-
-        public IEnumerable<Coral> GetCorals()
-        {
-            return _reefContext.Corals;
-        }
-
-        public IEnumerable<Coral> GetCoralsByCategory(Category category)
-        {
-            return _reefContext.Corals.Where(x => x.Subcategory.Category.Id == category.Id);
+            var creatures = _reefContext.Creatures.Where(x => x.Subcategory.Id == subcategory.Id);
+            LoadIntoCreatures(creatures);
+            
+            return creatures;
         }
 
         public IEnumerable<Subcategory> GetSubcategories(Category category)
         {
-            return _reefContext.Subcategories.Where(x => x.Category.Id == category.Id);
+            var subcategories = _reefContext.Subcategories.Where(x => x.CategoryId == category.Id);
+            LoadIntoSubcategories(subcategories);
+
+            return subcategories;
         }
+
+        public Subcategory GetFirstSubcategory()
+        {
+            var subcategory = _reefContext.Subcategories.FirstOrDefault();
+            LoadIntoSubcategory(subcategory);
+            return subcategory;
+        }
+
+        public Category GetFirstCategory()
+        {
+            return _reefContext.Categories.FirstOrDefault();
+        }
+
+        public void SaveMedia(Media media)
+        {
+            _reefContext.Media.Update(media);
+            _reefContext.SaveChangesAsync();
+        }
+
+        #region SubcategoryLoader 
+        public void LoadIntoSubcategory(Subcategory subcategory)
+        {
+            _reefContext.Entry(subcategory)
+                .Collection(x => x.Creatures)
+                .Load();
+
+            _reefContext.Entry(subcategory)
+                .Reference(x => x.Category)
+                .Load();
+        }
+
+        public void LoadIntoSubcategories(IEnumerable<Subcategory> subcategories)
+        {
+            foreach (var subcategory in subcategories)
+            {
+                LoadIntoSubcategory(subcategory);
+            }
+        }
+
+        #endregion
+
+
+        #region CreatureLoading
+
+        public void LoadIntoCreature(Creature creature)
+        {
+            _reefContext.Entry(creature)
+                .Collection(x => x.CreatureReferences)
+                .Load();
+
+            _reefContext.Entry(creature)
+                .Collection(x => x.CreatureTags)
+                .Load();
+
+            _reefContext.Entry(creature)
+                .Reference(x => x.Subcategory)
+                .Load();
+
+            _reefContext.Entry(creature.Subcategory)
+                .Reference(x => x.Category)
+                .Load();
+        }
+
+        public void LoadIntoCreatures(IEnumerable<Creature> creatures)
+        {
+            foreach (var creature in creatures)
+            {
+                LoadIntoCreature(creature);
+            }
+        }
+
+        #endregion
     }
 }
