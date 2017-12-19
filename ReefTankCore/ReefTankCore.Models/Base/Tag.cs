@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using ReefTank.Models.Base;
+using ReefTankCore.Models.Enums;
 
 namespace ReefTankCore.Models.Base
 {
@@ -16,6 +16,6 @@ namespace ReefTankCore.Models.Base
 
         public TagType TagType { get; set; }
 
-        public ICollection<CreatureTag> CreatureTags { get; set; }
+        public virtual ICollection<CreatureTag> CreatureTags { get; set; }
     }
 }

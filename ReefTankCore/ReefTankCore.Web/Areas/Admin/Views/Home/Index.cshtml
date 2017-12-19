@@ -1,10 +1,41 @@
-﻿@{
+﻿@model ReefTankCore.Web.Areas.Admin.Models.CategoryOverviewModel
+@{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<div>
-    <nav style="background-color: lightgray">
-        <h2>Index Layout</h2>
-    </nav>
+
+<div class="container">
+    <div class="panel panel-info top-buffer">
+        <div class="panel-heading">
+            <h2>List of categories</h2>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                @for (var i = 0; i < Model.Categories.Count(); i += 4)
+                {
+                    if (i > Model.Categories.Count())
+                    {
+                        i = Model.Categories.Count();
+                    }
+                    <div class="row top-buffer">
+                        @{
+                            var j = 0;
+                            for (; j <= 3 && i + j < Model.Categories.Count(); j++)
+                            {
+                                var category = @Model.Categories[i + j];
+                                <div class="col-md-3 center-block">
+                                    <a href="@Url.Action("Index","Category", new { Area = "Admin", Slug = category.Slug})">
+                                        <img class="category img-rounded img-responsive img-thumbnail" 
+                                             src="~/images/Categories/@(category.Slug).svg"
+                                             alt="@category.Name"/>
+                                    </a>
+                                </div>
+                            }
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>

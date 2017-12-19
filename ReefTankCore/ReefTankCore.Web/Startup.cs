@@ -57,6 +57,18 @@ namespace ReefTankCore.Web
                     template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
                 routes.MapRoute(
+                    name: "Admin_Category",
+                    template: "Admin/Category/{action}/{slug}");
+
+                routes.MapRoute(
+                    name: "Subcategory",
+                    template: "Admin/Subcategory/{action}/{slug}");
+
+                routes.MapRoute(
+                    name: "Creature",
+                    template: "Admin/Creature/{action}/{id}");
+
+                routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });

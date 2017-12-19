@@ -2,8 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using ReefTank.Models.Base;
 using ReefTankCore.Models.Base;
-using ReefTankCore.Models.Corals;
-using ReefTankCore.Models.Inhabitants;
 
 namespace ReefTankCore.Services.Context
 {
@@ -18,25 +16,48 @@ namespace ReefTankCore.Services.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Inhabitant>().ToTable("Inhabitant");
-            modelBuilder.Entity<Coral>().ToTable("Coral");
-            modelBuilder.Entity<Category>().ToTable("Category");
-            modelBuilder.Entity<Subcategory>().ToTable("Subcategory");
-            modelBuilder.Entity<Tag>().ToTable("Tag");
+            modelBuilder.Entity<Creature>().ToTable("Creature");
+
+            modelBuilder.Entity<Category>().ToTable("Category")
+                .HasMany(c => c.Subcategories)
+                .WithOne(s => s.Category);
+
+            modelBuilder.Entity<Subcategory>().ToTable("Subcategory")
+                .HasOne(x => x.Category)
+                .WithMany(x => x.Subcategories)
+                .HasForeignKey(x => new { x.CategoryId })
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Tag>().ToTable("Tag")
+                .HasMany(x => x.CreatureTags)
+                .WithOne(x => x.Tag)
+                .HasForeignKey(x => new { x.TagId });
+
             modelBuilder.Entity<Reference>().ToTable("Reference");
+
+            modelBuilder.Entity<CreatureReference>().ToTable("CreatureReference")
+                .HasOne(x => x.Creature)
+                .WithMany(x => x.CreatureReferences)
+                .HasForeignKey(x => new { x.CreatureId});
+
+            modelBuilder.Entity<CreatureReference>().ToTable("CreatureReference")
+                .HasOne(x => x.Reference)
+                .WithMany(x => x.CreatureReferences)
+                .HasForeignKey(x => new {x.ReferenceId});
+
+            modelBuilder.Entity<Media>().ToTable("Media")
+                .HasOne(x => x.Creature)
+                .WithOne(x => x.Logo)
+                .HasForeignKey<Creature>(x => new {x.Id});
         }
 
-        public DbSet<Inhabitant> Inhabitants { get; set; }
-        public DbSet<Coral> Corals { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Subcategory> Subcategories { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Reference> References { get; set; }
-
-        public IEnumerable<Inhabitant> GetInhabitants()
-        {
-            return Inhabitants;
-        }
-
+        public DbSet<CreatureReference> CreatureReferences { get; set; }
+        public DbSet<CreatureTag> CreatureTags { get; set; }
+        public DbSet<Media> Media { get; set; }
+        public DbSet<Creature> Creatures { get; set; }
     }
 }

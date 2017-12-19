@@ -8,9 +8,7 @@ namespace ReefTankCore.Models.Base
     /// </summary>
     public class Subcategory
     {
-        public Guid Id { get; set; }
-
-        public Category Category { get; set; }
+        public virtual Guid Id { get; set; }
 
         public string Slug { get; set; }
 
@@ -18,8 +16,11 @@ namespace ReefTankCore.Models.Base
 
         public string ScientificName { get; set; }
 
-        public ICollection<Creature> Creatures { get; set; }
-        
-        public virtual string Description { get; set; }
+        public string Description { get; set; }
+
+        public virtual ICollection<Creature> Creatures { get; set; }       
+
+        public virtual Guid CategoryId { get; set; }
+        public virtual Category Category { get; set; }
     }
 }

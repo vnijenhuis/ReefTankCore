@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ReefTankCore.Models.Corals
+namespace ReefTankCore.Models.Enums
 {
     public enum Difficulty
     {

@@ -1,0 +1,43 @@
+﻿@model ReefTankCore.Web.Areas.Admin.Models.CategoryDetailsModel
+
+@{
+    ViewBag.Title = "Category";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="panel panel-info top-buffer">
+        <div class="panel-heading">
+            <a href="@Url.Action("Index", "Home", new {Area = "Admin" })"><i class="glyphicon glyphicon-chevron-left"></i><strong>Categories</strong></a>
+            <h2>Subcategories in @Model.Name</h2>
+        </div>
+        <div class="panel-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Common name</th>
+                        <th>Scientific name</th>
+                        <th>Species</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var sub in Model.Subcategories)
+                {
+                    <tr>
+                        <td> @sub.CommonName </td>
+                        <td> @sub.ScientificName </td>
+                        <td> @sub.CreatureCount </td>
+                        <td>
+                            <a href="@Url.Action("Index","Subcategory", new { Area = "Admin", Slug = sub.Slug})"><i class="glyphicon glyphicon-info-sign"></i></a>
+                            <a href=""><i class="glyphicon glyphicon-edit"></i></a>
+                            <a href=""><i class="glyphicon glyphicon-remove"></i></a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

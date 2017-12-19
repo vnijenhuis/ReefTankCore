@@ -18,14 +18,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">ReefTank WebApp</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Home</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                    <li><a asp-area="Admin" asp-controller="Home" asp-action="Index">Admin</a></li>
+                    @await Component.InvokeAsync("CategoryMenu")
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a asp-area="Admin" asp-controller="Home" asp-action="Index">Login</a></li>
                 </ul>
             </div>
         </div>

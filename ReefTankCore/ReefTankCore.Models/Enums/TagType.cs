@@ -1,4 +1,4 @@
-﻿namespace ReefTankCore.Models.Base
+﻿namespace ReefTankCore.Models.Enums
 {
     public enum TagType
     {

@@ -7,12 +7,12 @@ namespace ReefTankCore.Models.Base
 {
     public class CreatureReference
     {
-        public virtual int Id { get; set; }
+        public Guid Id { get; set; }
 
-        public virtual Guid ReferenceId { get; set; }
-        public virtual Reference Reference { get; set; }
+        public Guid ReferenceId { get; set; }
+        public Reference Reference { get; set; }
 
-        public virtual Guid CreatureId { get; set; }
-        public virtual Creature Creature { get; set; }
+        public Guid CreatureId { get; set; }
+        public Creature Creature { get; set; }
     }
 }
