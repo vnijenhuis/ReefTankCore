@@ -6,7 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ReefTankCore.Models.Base;
 using ReefTankCore.Services.Context;
-using ReefTankCore.Web.Areas.Admin.Models;
+using ReefTankCore.Web.Areas.Admin.Models.Categories;
 
 namespace ReefTankCore.Web.Areas.Admin.Controllers
 {
@@ -20,16 +20,13 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
             _reefService = reefService;
         }
 
-        public IActionResult Index(string slug)
+        [HttpGet]
+        public IActionResult Index()
         {
-            var category = _reefService.GetCategory(slug) ?? _reefService.GetFirstCategory();
-            var subcategories = _reefService.GetSubcategories(category).ToList();
-            var vm = new CategoryDetailsModel()
+            var categories = _reefService.GetCategories();
+            var vm = new CategoryOverviewModel()
             {
-                Id = category.Id,
-                Name = category.Name,
-                Slug = category.Slug,
-                Subcategories = Mapper.Map<IEnumerable<Subcategory>, IList<SubcategoryIndexModel>>(subcategories),
+                Categories = Mapper.Map<IEnumerable<Category>, IList<CategoryIndexModel>>(categories),
             };
             return View(vm);
         }

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReefTankCore.Models.Base;
+using ReefTankCore.Models.Enums;
 
 namespace ReefTankCore.Services.Context
 {
@@ -33,6 +35,7 @@ namespace ReefTankCore.Services.Context
         public Subcategory GetSubcategory(Guid id)
         {
             var subcategory = _reefContext.Subcategories.Find(id);
+            LoadIntoSubcategory(subcategory);
             return subcategory;
         }
 
@@ -52,7 +55,7 @@ namespace ReefTankCore.Services.Context
         public void SaveCreature(Creature creature)
         {
             _reefContext.Creatures.Update(creature);
-            _reefContext.SaveChangesAsync();
+            _reefContext.SaveChanges();
         }
         
         public Category GetCategory(Guid id)
@@ -73,7 +76,16 @@ namespace ReefTankCore.Services.Context
             var creature = _reefContext.Creatures.Find(id);
             LoadIntoCreature(creature);
 
-            return _reefContext.Creatures.Find(id);
+            return creature;
+        }
+
+        public async Task<Creature> GetCreatureAsync(Guid id)
+        {
+            var creature = await _reefContext.Creatures.FindAsync(id);
+
+            LoadIntoCreature(creature);
+
+            return creature;
         }
 
         public IEnumerable<Creature> GetCreaturesByCategory(Category category)
@@ -118,7 +130,46 @@ namespace ReefTankCore.Services.Context
             _reefContext.SaveChangesAsync();
         }
 
+        public async Task SaveCreatureAsync(Creature creature)
+        {
+            _reefContext.Creatures.Update(creature);
+            await _reefContext.SaveChangesAsync();
+        }
+
+        public Media GetImage(Guid id)
+        {
+            return _reefContext.Media.Find(id);
+        }
+
+        public IEnumerable<Tag> GetTags()
+        {
+            return _reefContext.Tags;
+        }
+
+        public IEnumerable<CreatureTag> GetCreatureTags(Creature creature)
+        {
+            var creatureTags = _reefContext.CreatureTags.Where(x => x.CreatureId == creature.Id);
+            return creatureTags;
+        }
+
+        public void DeleteCreatureTag(CreatureTag tag)
+        {
+            _reefContext.CreatureTags.Remove(tag);
+            _reefContext.SaveChanges();
+        }
+
+        public void SaveCreatureTag(CreatureTag creatureTag)
+        {
+            _reefContext.CreatureTags.Add(creatureTag);
+            _reefContext.SaveChanges();
+        }
+
         #region SubcategoryLoader 
+
+        /// <summary>
+        /// Loads related entities into a Subcategory entity.
+        /// </summary>
+        /// <param name="subcategory"></param>
         public void LoadIntoSubcategory(Subcategory subcategory)
         {
             _reefContext.Entry(subcategory)
@@ -129,7 +180,11 @@ namespace ReefTankCore.Services.Context
                 .Reference(x => x.Category)
                 .Load();
         }
-
+        
+        /// <summary>
+        /// Loads related entities into each provided Subcategory entity.
+        /// </summary>
+        /// <param name="subcategories"></param>
         public void LoadIntoSubcategories(IEnumerable<Subcategory> subcategories)
         {
             foreach (var subcategory in subcategories)
@@ -143,6 +198,10 @@ namespace ReefTankCore.Services.Context
 
         #region CreatureLoading
 
+        /// <summary>
+        /// Loads related entities into a Creature entity.
+        /// </summary>
+        /// <param name="creature"></param>
         public void LoadIntoCreature(Creature creature)
         {
             _reefContext.Entry(creature)
@@ -154,6 +213,10 @@ namespace ReefTankCore.Services.Context
                 .Load();
 
             _reefContext.Entry(creature)
+                .Reference(x => x.Media)
+                .Load();
+
+            _reefContext.Entry(creature)
                 .Reference(x => x.Subcategory)
                 .Load();
 
@@ -162,6 +225,10 @@ namespace ReefTankCore.Services.Context
                 .Load();
         }
 
+        /// <summary>
+        /// Loads related entities into each provided Creature entity.
+        /// </summary>
+        /// <param name="creatures"></param>
         public void LoadIntoCreatures(IEnumerable<Creature> creatures)
         {
             foreach (var creature in creatures)

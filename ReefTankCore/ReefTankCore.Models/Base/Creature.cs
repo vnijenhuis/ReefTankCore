@@ -58,7 +58,7 @@ namespace ReefTankCore.Models.Base
         {
             get
             {
-                string phValue = $"{MinimumPh} - {MaximumPh}";
+                var phValue = $"{MinimumPh} - {MaximumPh}";
                 return phValue;
             }
         }
@@ -71,7 +71,7 @@ namespace ReefTankCore.Models.Base
         {
             get
             {
-                string phValue = $"{MinimumCalciumPpm} - {MaximumCalciumPpm}";
+                var phValue = $"{MinimumCalciumPpm} - {MaximumCalciumPpm}";
                 return phValue;
             }
         }
@@ -84,7 +84,7 @@ namespace ReefTankCore.Models.Base
         {
             get
             {
-                string phValue = $"{MinimumTemperature}°C - {MaximumTemperature}°C";
+                var phValue = $"{MinimumTemperature}°C - {MaximumTemperature}°C";
                 return phValue;
             }
         }
@@ -93,9 +93,10 @@ namespace ReefTankCore.Models.Base
 
         public virtual ICollection<CreatureReference> CreatureReferences { get; set; }
 
-        public Media Logo { get; set; }
-
-        public Guid SubcategoryId { get; set; }
-        public Subcategory Subcategory { get; set; }
+        public Guid? MediaId { get; set; }
+        public virtual Media Media { get; set; }
+        
+        public Guid? SubcategoryId { get; set; }
+        public virtual Subcategory Subcategory { get; set; }
     }
 }

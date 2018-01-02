@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ReefTankCore.Web.Areas.Admin.Models
+namespace ReefTankCore.Web.Areas.Admin.Models.Categories
 {
     public class CategoryOverviewModel
     {

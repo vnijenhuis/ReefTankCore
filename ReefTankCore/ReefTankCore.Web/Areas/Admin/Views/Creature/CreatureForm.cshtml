@@ -1,0 +1,146 @@
+﻿@model ReefTankCore.Web.Areas.Admin.Models.Creatures.CreatureDetailsModel
+
+@Html.HiddenFor(x => x.SubcategorySlug)
+@Html.HiddenFor(x => x.CategorySlug)
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(x => x.CommonName, "Common name")
+            @Html.TextBoxFor(x => x.CommonName, new { Class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.Genus)
+            @Html.TextBoxFor(x => x.Genus, new { Class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.Species)
+            @Html.TextBoxFor(x => x.Species, new { Class = "form-control" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <label>Logo</label>
+        <img class="logo img-responsive img-thumbnail" id="creature" src='@Url.Content("/images/Creatures/" + Model.FileName)' alt="Image" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label">Subcategory <span class="required">*</span></label>
+            @Html.DropDownListFor(x => x.SubcategoryId, new SelectList(Model.SubcategoryItems, "Id", "CommonName"), "Select a subcategory", new { Class = "form-control" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Upload Image</label>
+            <div class="input-group">
+                <span class="input-group-btn">
+                    <span class="btn btn-default btn-file">
+                        Browse…
+                        <input type="file" name="upload" id="imgInp">
+                    </span>
+                </span>
+                <input type="text" id="filename" class="form-control" readonly>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <div class="form-group">
+            @Html.LabelFor(x => x.Volume, "Minimum volume in liters")
+            @Html.TextBoxFor(x => x.Volume, new { Class = "form-control", type = "number", min = 0, max = 10000 })
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            @Html.LabelFor(x => x.Length, "Average length")
+            @Html.TextBoxFor(x => x.Length, new { Class = "form-control", type = "text", min = 0, max = 500 })
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            @Html.LabelFor(x => x.Diet)
+            @Html.TextBoxFor(x => x.Diet, new { Class = "form-control" })
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            @Html.LabelFor(x => x.Origin)
+            @Html.TextBoxFor(x => x.Origin, new { Class = "form-control" })
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="form-group">
+            @Html.LabelFor(x => x.Temperament)
+            @Html.DropDownListFor(x => x.Temperament, Model.TemperamentItems, new { Class = "form-control" })
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            @Html.LabelFor(x => x.Difficulty)
+            @Html.DropDownListFor(x => x.Difficulty, Model.DifficultyItems, new { Class = "form-control" })
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            @Html.LabelFor(x => x.SpecialRequirements, "Special requirements")
+            @Html.DropDownListFor(x => x.SpecialRequirements, Model.SpecialRequirementItems, new { Class = "form-control" })
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            @Html.LabelFor(x => x.ReefCompatability, "Reef compatability")
+            @Html.DropDownListFor(x => x.ReefCompatability, Model.ReefCompatabilityItems, new { Class = "form-control" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.LabelFor(x => x.Description)
+            @Html.TextAreaFor(x => x.Description, 15, 10, new { Class = "form-control desc-area" })
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    @foreach (var tagTypeModel in Model.TagItems)
+    {
+        {
+            <div class="col-md-4">
+                <ul class="list-group">
+                    <li class="list-group-item borderless">
+                        <h2>@tagTypeModel.Name</h2>
+                    </li>
+                    @foreach (var tag in tagTypeModel.Tags)
+                    {
+                        var tagChecked = "";
+                        if (Model.TagList != null)
+                        {
+                            if (Model.TagList.Contains(tag.Id))
+                            {
+                                tagChecked = "checked='checked'";
+                            }
+                        }
+                        <li class="list-group-item borderless">
+                            <div class="checkbox checbox-switch switch-info">
+                                <label>
+                                    <input type="checkbox" name="TagList" @tagChecked value="@tag.Id" />
+                                    <span></span>
+                                    @tag.Title
+                                </label>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+    }
+</div>
+
+@Html.AntiForgeryToken()
+<input type="submit" class="btn btn-primary" />
+<a href="@Url.Action("Index", "Creature", new {Area = "Admin", Slug = Model.SubcategorySlug})" class="btn btn-link">Cancel</a>

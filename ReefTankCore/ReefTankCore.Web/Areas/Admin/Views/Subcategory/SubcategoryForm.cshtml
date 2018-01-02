@@ -1,0 +1,28 @@
+﻿@model ReefTankCore.Web.Areas.Admin.Models.Subcategories.SubcategoryDetailsModel
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(x => x.CommonName, "Common name")
+            @Html.TextBoxFor(x => x.CommonName, new { Class = "form-control" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(x => x.ScientificName, "Scientific name")
+            @Html.TextBoxFor(x => x.ScientificName, new { Class = "form-control" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.LabelFor(x => x.Description)
+            @Html.TextAreaFor(x => x.Description, 15, 10, new { Class = "form-control desc-area" })
+        </div>
+    </div>
+</div>
+
+@Html.AntiForgeryToken()
+<input type="submit" class="btn btn-primary" />
+<a href="@Url.Action("Index", "Subcategory", new {Area = "Admin", Slug = Model.CategorySlug})" class="btn btn-link">Cancel</a>

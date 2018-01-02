@@ -13,7 +13,7 @@ namespace ReefTankCore.Models.Enums
         [Display(Name = "Is often reef safe")]
         Often = 2,
 
-        [Display(Name = "Is reef safe with caution and proper care")]
+        [Display(Name = "Is reef safe with caution")]
         WithCaution = 3,
 
         [Display(Name = "Is reef safe if lucky")]

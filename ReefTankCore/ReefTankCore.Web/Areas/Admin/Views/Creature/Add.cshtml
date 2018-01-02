@@ -1,0 +1,48 @@
+﻿@model ReefTankCore.Web.Areas.Admin.Models.Creatures.CreatureDetailsModel
+
+@{
+    ViewBag.Title = "Creature";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <div class="panel panel-info top-buffer">
+        <div class="panel-heading">
+            <h2>Add entry for @Model.SubcategoryCommonName</h2>
+        </div>
+        <div class="panel-body">
+            @using (Html.BeginForm("Edit", "Creature", FormMethod.Post, new {enctype = "multipart/form-data"}))
+            {
+                Html.RenderPartial("CreatureForm");
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script>
+        $(document).ready(function() {
+            $('#filename').val('@Model.FileName');
+        });
+
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#creature').attr('src', e.target.result);
+                    $('#filename').val(input.files[0].name);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#imgInp").change(function () {
+            readURL(this);
+        });
+    </script>
+}

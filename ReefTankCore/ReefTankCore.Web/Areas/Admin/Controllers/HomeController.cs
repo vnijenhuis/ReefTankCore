@@ -19,14 +19,10 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
             _reefService = reefService;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
-            var categories = _reefService.GetCategories();
-            var vm = new CategoryOverviewModel()
-            {
-                Categories = Mapper.Map<IEnumerable<Category>, IList<CategoryIndexModel>>(categories),
-            };
-            return View(vm);
+            return RedirectToAction("Index", "Category");
         }
     }
 }

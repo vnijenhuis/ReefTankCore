@@ -14,7 +14,7 @@ namespace ReefTankCore.Models.Base
 
         public byte[] Image { get; set; }
 
-        public Guid CreatureId { get; set; }
+        public Guid? CreatureId { get; set; }
         public virtual Creature Creature { get; set; }
     }
 }

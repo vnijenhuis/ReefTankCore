@@ -4,7 +4,10 @@
 }
 
 
-@RenderSection("Head", false)
+@section Head {
+    @RenderSection("Head", false)
+}
+
 
 
 @section Menu
@@ -23,6 +26,9 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="@Url.Action("Index", "Home" , new { Area = "Admin"})">Categories</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    @await Html.PartialAsync("_LoginPartial")
                 </ul>
             </div>
         </div>

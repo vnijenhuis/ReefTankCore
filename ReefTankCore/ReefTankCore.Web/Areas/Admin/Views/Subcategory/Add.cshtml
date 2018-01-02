@@ -1,0 +1,21 @@
+﻿@model ReefTankCore.Web.Areas.Admin.Models.Subcategories.SubcategoryDetailsModel
+
+@{
+    ViewBag.Title = "Creature";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <div class="panel panel-info top-buffer">
+        <div class="panel-heading">
+            <h2>Add new subcategory</h2>
+        </div>
+        <div class="panel-body">
+            @using (Html.BeginForm("Edit", "Subcategory", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                Html.RenderPartial("SubcategoryForm");
+            }
+        </div>
+    </div>
+</div>

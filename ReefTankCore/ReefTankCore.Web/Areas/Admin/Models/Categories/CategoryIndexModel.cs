@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace ReefTankCore.Web.Areas.Admin.Models
+namespace ReefTankCore.Web.Areas.Admin.Models.Categories
 {
     public class CategoryIndexModel
     {

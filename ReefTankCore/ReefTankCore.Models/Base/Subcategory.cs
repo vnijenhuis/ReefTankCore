@@ -20,7 +20,7 @@ namespace ReefTankCore.Models.Base
 
         public virtual ICollection<Creature> Creatures { get; set; }       
 
-        public virtual Guid CategoryId { get; set; }
+        public Guid? CategoryId { get; set; }
         public virtual Category Category { get; set; }
     }
 }
