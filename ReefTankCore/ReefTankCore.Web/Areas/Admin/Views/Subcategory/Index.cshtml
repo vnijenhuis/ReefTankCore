@@ -1,41 +1,37 @@
-﻿@model ReefTankCore.Web.Areas.Admin.Models.SubcategoryDetailsModel
+﻿@model ReefTankCore.Web.Areas.Admin.Models.Categories.CategoryDetailsModel
 
 @{
-    ViewBag.Title = "Subcategory";
+    ViewBag.Title = "Category";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container">
     <div class="panel panel-info top-buffer">
         <div class="panel-heading">
-            <a href="@Url.Action("Index", "Category", new {Area = "Admin", Slug = Model.CategorySlug})"><i class="glyphicon glyphicon-chevron-left"></i> <strong>@Model.CategoryName</strong></a>
-            <h2>@Model.CommonName</h2>
-            <div class="dropdown-header">
-                @Html.Raw(Model.Description)
-            </div>
+            <a href="@Url.Action("Index", "Home", new {Area = "Admin" })"><i class="glyphicon glyphicon-chevron-left"></i><strong>Categories</strong></a>
+            <h2>@Model.Name</h2>
         </div>
         <div class="panel-body">
             <table class="table table-bordered">
                 <thead>
-                <tr>
-                    <th>Common name</th>
-                    <th>Genus</th>
-                    <th>Species</th>
-                    <th>Origin</th>
-                    <th>Options</th>
-                </tr>
+                    <tr>
+                        <th>Common name</th>
+                        <th>Scientific name</th>
+                        <th>Species</th>
+                        <th>Options</th>
+                    </tr>
                 </thead>
                 <tbody>
-                @foreach (var creature in Model.Creatures)
+                @foreach (var sub in Model.Subcategories)
                 {
                     <tr>
-                        <td> @creature.CommonName </td>
-                        <td> @creature.Genus </td>
-                        <td> @creature.Species </td>
-                        <td> @creature.Origin </td>
+                        <td> @sub.CommonName </td>
+                        <td> @sub.ScientificName </td>
+                        <td> @sub.CreatureCount </td>
                         <td>
-                            <a href="@Url.Action("Edit", "Creature", new {Area = "Admin", Id = creature.Id})"><i class="glyphicon glyphicon-edit"></i></a>
-                            <a href=""><i class="glyphicon glyphicon-remove"></i></a>
+                            <a href="@Url.Action("Index","Creature", new { Area = "Admin", Slug = sub.Slug})"><i class="material-icons md-21">info</i></a>
+                            <a href=""><i class="material-icons md-21">edit</i></a>
+                            <a href=""><i class="material-icons md-21">delete</i></a>
                         </td>
                     </tr>
                 }
@@ -44,3 +40,4 @@
         </div>
     </div>
 </div>
+

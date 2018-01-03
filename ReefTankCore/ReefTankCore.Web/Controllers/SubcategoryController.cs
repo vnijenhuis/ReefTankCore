@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReefTankCore.Models.Base;
 using ReefTankCore.Services.Context;
@@ -10,6 +11,7 @@ using ReefTankCore.Web.Models;
 
 namespace ReefTankCore.Web.Controllers
 {
+    [AllowAnonymous]
     public class SubcategoryController : Controller
     {
         private readonly IReefService _reefService;

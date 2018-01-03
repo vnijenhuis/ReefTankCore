@@ -10,9 +10,9 @@ namespace ReefTankCore.Models.Base
         public Guid Id { get; set; }
 
         public Guid ReferenceId { get; set; }
-        public Reference Reference { get; set; }
+        public virtual Reference Reference { get; set; }
 
         public Guid CreatureId { get; set; }
-        public Creature Creature { get; set; }
+        public virtual Creature Creature { get; set; }
     }
 }

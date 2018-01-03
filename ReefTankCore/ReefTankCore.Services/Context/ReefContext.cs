@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ReefTank.Models.Base;
 using ReefTankCore.Models.Base;
+using ReefTankCore.Models.Users;
 
 namespace ReefTankCore.Services.Context
 {
@@ -17,6 +18,25 @@ namespace ReefTankCore.Services.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Creature>().ToTable("Creature");
+            modelBuilder.Entity<Creature>()
+                .HasOne(x => x.Subcategory)
+                .WithMany(x => x.Creatures)
+                .HasForeignKey(x => x.SubcategoryId);
+
+            modelBuilder.Entity<Creature>()
+                .HasMany(x => x.CreatureReferences)
+                .WithOne(x => x.Creature)
+                .HasForeignKey(x => x.CreatureId);
+
+            modelBuilder.Entity<Creature>()
+                .HasMany(x => x.CreatureTags)
+                .WithOne(x => x.Creature)
+                .HasForeignKey(x => x.CreatureId);
+
+            modelBuilder.Entity<Media>().ToTable("Media")
+                .HasOne(x => x.Creature)
+                .WithOne(x => x.Media)
+                .HasForeignKey<Creature>(x => new { x.MediaId });
 
             modelBuilder.Entity<Category>().ToTable("Category")
                 .HasMany(c => c.Subcategories)
@@ -33,22 +53,18 @@ namespace ReefTankCore.Services.Context
                 .WithOne(x => x.Tag)
                 .HasForeignKey(x => new { x.TagId });
 
-            modelBuilder.Entity<Reference>().ToTable("Reference");
+            modelBuilder.Entity<Reference>().ToTable("Reference")
+                .HasMany(x => x.CreatureReferences)
+                .WithOne(x => x.Reference)
+                .HasForeignKey(x => new { x.ReferenceId });
+
+            modelBuilder.Entity<CreatureTag>().ToTable("CreatureTag")
+                .HasKey(t => new { t.CreatureId, t.TagId });
 
             modelBuilder.Entity<CreatureReference>().ToTable("CreatureReference")
-                .HasOne(x => x.Creature)
-                .WithMany(x => x.CreatureReferences)
-                .HasForeignKey(x => new { x.CreatureId});
+                .HasKey(x => new { x.CreatureId, x.ReferenceId });
 
-            modelBuilder.Entity<CreatureReference>().ToTable("CreatureReference")
-                .HasOne(x => x.Reference)
-                .WithMany(x => x.CreatureReferences)
-                .HasForeignKey(x => new {x.ReferenceId});
-
-            modelBuilder.Entity<Media>().ToTable("Media")
-                .HasOne(x => x.Creature)
-                .WithOne(x => x.Logo)
-                .HasForeignKey<Creature>(x => new {x.Id});
+            modelBuilder.Entity<User>().ToTable("User");
         }
 
         public DbSet<Category> Categories { get; set; }

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ReefTankCore.Models.Base;
 using ReefTankCore.Services.Context;
-using ReefTankCore.Web.Areas.Admin.Models;
+using ReefTankCore.Web.Areas.Admin.Models.Categories;
+using ReefTankCore.Web.Areas.Admin.Models.Subcategories;
 
 namespace ReefTankCore.Web.Areas.Admin.Controllers
 {
@@ -20,13 +20,29 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
             _reefService = reefService;
         }
 
+        [HttpGet]
         public IActionResult Index(string slug)
         {
-            var subcategory = _reefService.GetSubcategory(slug) ?? _reefService.GetFirstSubcategory();
-
-            var vm = Mapper.Map<Subcategory, SubcategoryDetailsModel>(subcategory);
-            vm.Creatures = Mapper.Map<IEnumerable<Creature>, IList<CreatureIndexModel>>(subcategory.Creatures);
+            var category = _reefService.GetCategory(slug) ?? _reefService.GetFirstCategory();
+            var subcategories = _reefService.GetSubcategories(category).ToList();
+            var vm = new CategoryDetailsModel()
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Slug = category.Slug,
+                Subcategories = Mapper.Map<IEnumerable<Subcategory>, IList<SubcategoryIndexModel>>(subcategories),
+            };
             return View(vm);
         }
-    }
+
+        public IActionResult Add()
+        {
+            return View();
+        }
+
+        public IActionResult Edit(Guid id)
+        {
+            return View();
+        }
+     }
 }

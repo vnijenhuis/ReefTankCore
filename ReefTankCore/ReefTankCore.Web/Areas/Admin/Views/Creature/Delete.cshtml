@@ -1,0 +1,37 @@
+﻿@model ReefTankCore.Web.Areas.Admin.Models.Creatures.DeleteCreatureViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="panel panel-info top-buffer">
+        <div class="panel-heading">
+            <h2>Delete @Model.CommonName</h2>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                @using(Html.BeginForm())
+                {
+                    <p>Weet u zeker dat u deze video wilt verwijderen? </p>
+        
+                    <div class="well">
+                        <ul>
+                            <li>@Model.CommonName</li>
+                            <li>@Model.Subcategory>
+                        </ul>
+                    </div>
+     
+                    <div class="alert alert-block">
+                        This species will be removed, this action cannot be reversed.
+                    </div>
+                    @Html.Hidden("confirm", true)
+                    <button type="submit" class="btn btn-danger">Ja, verwijderen</button>
+                    <a href="@Url.Action("Index", "Creature")">Annuleren</a>
+           
+                }
+            </div>
+        </div>
+    </div>
+</div>

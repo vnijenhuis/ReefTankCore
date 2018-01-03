@@ -12,28 +12,27 @@ namespace ReefTankCore.Web.Data
     {
         public static void Initialize(ReefContext context)
         {
-            foreach (var entity in context.References)
-                context.References.Remove(entity);
-            context.SaveChanges();
+            //foreach (var entity in context.References)
+            //    context.References.Remove(entity);
+            //context.SaveChanges();
 
-            foreach (var entity in context.Tags)
-                context.Tags.Remove(entity);
-            context.SaveChanges();
+            //foreach (var entity in context.Tags)
+            //    context.Tags.Remove(entity);
+            //context.SaveChanges();
 
-            foreach (var entity in context.Creatures)
-                context.Creatures.Remove(entity);
-            context.SaveChanges();
+            //foreach (var entity in context.Creatures)
+            //    context.Creatures.Remove(entity);
+            //context.SaveChanges();
 
-            foreach (var entity in context.Subcategories)
-                context.Subcategories.Remove(entity);
-            context.SaveChanges();
+            //foreach (var entity in context.Subcategories)
+            //    context.Subcategories.Remove(entity);
+            //context.SaveChanges();
 
-            foreach (var entity in context.Categories)
-                context.Categories.Remove(entity);
-            context.SaveChanges();
+            //foreach (var entity in context.Categories)
+            //    context.Categories.Remove(entity);
+            //context.SaveChanges();
 
             context.Database.EnsureCreated();
-
 
             if (context.Categories.Any())
             {
@@ -573,12 +572,10 @@ namespace ReefTankCore.Web.Data
                 Volume = 125,
                 Difficulty = Difficulty.Beginner,
                 Diet = "Omnivore",
-                Subcategory = fish.First(x => x.Slug == "damselfish")
+                Subcategory = fish.First(x => x.Slug == "damselfish"),
             };
 
             context.Creatures.Add(a);
-
-            context.Media.Add(new Media() { CreatureId = a.Id });
 
             foreach (var inhabitant in creatures)
             {

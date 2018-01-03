@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using ReefTankCore.Models.Base;
 using ReefTankCore.Models.Enums;
-using ReefTankCore.Web.Areas.Admin.Controllers;
 
-namespace ReefTankCore.Web.Areas.Admin.Models
+namespace ReefTankCore.Web.Areas.Admin.Models.Creatures
 {
     public class CreatureDetailsModel
     {
@@ -28,8 +26,6 @@ namespace ReefTankCore.Web.Areas.Admin.Models
 
         public string CategorySlug { get; set; }
 
-        public IFormFile Logo { get; set; }
-
         public string CommonName { get; set; }
 
         public string Origin { get; set; }
@@ -42,11 +38,19 @@ namespace ReefTankCore.Web.Areas.Admin.Models
 
         public SpecialRequirements SpecialRequirements { get; set; }
 
+        public List<SelectListItem> SpecialRequirementItems { get; set; }
+
         public ReefCompatability ReefCompatability { get; set; }
+
+        public List<SelectListItem> ReefCompatabilityItems { get; set; }
 
         public Temperament Temperament { get; set; }
 
+        public List<SelectListItem> TemperamentItems { get; set; }
+
         public Difficulty Difficulty { get; set; }
+
+        public List<SelectListItem> DifficultyItems { get; set; }
 
         public string DifficultyDescription { get; set; }
 
@@ -68,8 +72,15 @@ namespace ReefTankCore.Web.Areas.Admin.Models
 
         public double MaximumTemperature { get; set; }
 
-        //public virtual ICollection<CreatureTag> CreatureTags { get; set; }
+        public string FileName { get; set; }
 
-        //public virtual ICollection<CreatureReference> CreatureReferences { get; set; }
+        [Required(ErrorMessage = "Please select a subcategory")]
+        public Guid SubcategoryId { get; set; }
+
+        public List<Subcategory> SubcategoryItems;
+        
+        public Guid[] TagList { get; set; }
+
+        public List<TagTypeViewModel> TagItems { get; set; }
     }
 }
