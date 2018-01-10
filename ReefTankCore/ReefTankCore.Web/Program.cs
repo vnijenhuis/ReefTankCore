@@ -5,9 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using ReefTankCore.Models.Users;
 using ReefTankCore.Services;
 using ReefTankCore.Services.Context;
 using ReefTankCore.Web.Data;
@@ -26,7 +28,9 @@ namespace ReefTankCore.Web
                 try
                 {
                     var context = services.GetRequiredService<ReefContext>();
-                    DbInitializer.Initialize(context);
+                    var userManager = services.GetRequiredService<UserManager<User>>();
+                    var roleManager = services.GetRequiredService<RoleManager<Role>>();
+                    DbInitializer.Initialize(context, userManager, roleManager);
                     ResxIntializer.Initialze(context);
                 }
                 catch (Exception e)

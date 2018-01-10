@@ -29,9 +29,9 @@
                         <td> @sub.ScientificName </td>
                         <td> @sub.CreatureCount </td>
                         <td>
-                            <a href="@Url.Action("Index","Creature", new { Area = "Admin", Slug = sub.Slug})"><i class="material-icons md-21">info</i></a>
-                            <a href=""><i class="material-icons md-21">edit</i></a>
-                            <a href=""><i class="material-icons md-21">delete</i></a>
+                            <a href="@Url.Action("Index","Creature", new { Area = "Admin", Id = sub.Id})"><i class="material-icons md-21">info</i></a>
+                            <a href="@Url.Action("Edit","Creature", new { Area = "Admin", Id = sub.Id})"><i class="material-icons md-21">edit</i></a>
+                            <a href="@Url.Action("Delete","Creature", new { Area = "Admin", Id = sub.Id})"><i class="material-icons md-21">delete</i></a>
                         </td>
                     </tr>
                 }

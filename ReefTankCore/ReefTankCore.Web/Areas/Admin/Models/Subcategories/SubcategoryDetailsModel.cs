@@ -1,6 +1,8 @@
 ﻿using ReefTankCore.Web.Areas.Admin.Models.Creatures;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using ReefTankCore.Models.Base;
 
 namespace ReefTankCore.Web.Areas.Admin.Models.Subcategories
 {

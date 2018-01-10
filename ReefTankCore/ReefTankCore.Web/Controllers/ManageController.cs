@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ReefTankCore.Models.Users;
+using ReefTankCore.Services.Email;
 using ReefTankCore.Web.Extensions;
 using ReefTankCore.Web.Models.Manage;
-using WebApplication1.Services;
 
 namespace ReefTankCore.Web.Controllers
 {
@@ -26,12 +26,7 @@ namespace ReefTankCore.Web.Controllers
 
         private const string AuthenicatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
-        public ManageController(
-          UserManager<User> userManager,
-          SignInManager<User> signInManager,
-          IEmailSender emailSender,
-          ILogger<ManageController> logger,
-          UrlEncoder urlEncoder)
+        public ManageController(UserManager<User> userManager, SignInManager<User> signInManager, IEmailSender emailSender, ILogger<ManageController> logger, UrlEncoder urlEncoder)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -264,7 +259,7 @@ namespace ReefTankCore.Web.Controllers
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var info = await _signInManager.GetExternalLoginInfoAsync(user.Id);
+            var info = await _signInManager.GetExternalLoginInfoAsync(user.Id.ToString());
             if (info == null)
             {
                 throw new ApplicationException($"Unexpected error occurred loading external login info for user with ID '{user.Id}'.");

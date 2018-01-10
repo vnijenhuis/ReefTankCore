@@ -9,16 +9,8 @@ using ReefTankCore.Web.Models;
 
 namespace ReefTankCore.Web.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    public class HomeController : Controller
+    public class HomeController : AdminController
     {
-        private readonly IReefService _reefService;
-
-        public HomeController(IReefService reefService)
-        {
-            _reefService = reefService;
-        }
-
         [HttpGet]
         public IActionResult Index()
         {

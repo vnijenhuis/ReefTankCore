@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,8 +13,8 @@ using Microsoft.Extensions.DependencyInjection;
 using ReefTankCore.Models.Users;
 using ReefTankCore.Services;
 using ReefTankCore.Services.Context;
+using ReefTankCore.Services.Email;
 using ReefTankCore.Web.Data;
-using WebApplication1.Services;
 
 namespace ReefTankCore.Web
 {
@@ -33,9 +34,10 @@ namespace ReefTankCore.Web
             //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("ReefTankCore.Web")));
             services.AddMvc();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IReefService, ReefService>();
 
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<ReefContext>()
                 .AddDefaultTokenProviders();
 
@@ -58,14 +60,27 @@ namespace ReefTankCore.Web
                 options.User.RequireUniqueEmail = true;
 
                 // SignIn settings
-                options.SignIn.RequireConfirmedEmail = true;
+                options.SignIn.RequireConfirmedEmail = false;
             });
 
             //Add policy authorization
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Admin"));
-                options.AddPolicy("RequireReeferRole", policy => policy.RequireRole("Reefer"));
+                //Only allows system owner to come in this area.
+                options.AddPolicy("SystemOwner", policy =>
+                {
+                    policy.RequireRole("SystemOwner");
+                });
+                //Allows admin and system owner in this area.
+                options.AddPolicy("Administrator", policy =>
+                {
+                    policy.RequireRole("SystemOwner", "Administrator");
+                });
+                //Allows reefuser, admin and systemowner in this area.
+                options.AddPolicy("ReefUser", policy =>
+                {
+                    policy.RequireRole("SystemOwner", "Administrator", "ReefUser");
+                });
             });
 
             // Add application services.

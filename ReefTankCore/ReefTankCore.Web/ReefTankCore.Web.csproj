@@ -30,12 +30,16 @@
   <ItemGroup>
     <Compile Remove="Data\IReefService.cs" />
     <Compile Remove="Data\ReefService.cs" />
-    <Compile Remove="Migrations\20171220100421_InitialCreate.cs" />
-    <Compile Remove="Migrations\20171220100421_InitialCreate.Designer.cs" />
-    <Compile Remove="Migrations\20171220122302_NewMedia.cs" />
-    <Compile Remove="Migrations\20171220122302_NewMedia.Designer.cs" />
-    <Compile Remove="Migrations\20171220123219_UpdateModel.cs" />
-    <Compile Remove="Migrations\20171220123219_UpdateModel.Designer.cs" />
+    <Compile Remove="Migrations\20180109130836_Initial.cs" />
+    <Compile Remove="Migrations\20180109130836_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20180109131307_AuthenticationV1.cs" />
+    <Compile Remove="Migrations\20180109131307_AuthenticationV1.Designer.cs" />
+    <Compile Remove="Migrations\20180109135043_AuthenticationV2.cs" />
+    <Compile Remove="Migrations\20180109135043_AuthenticationV2.Designer.cs" />
+    <Compile Remove="Migrations\20180109135438_AuthenticationV3.cs" />
+    <Compile Remove="Migrations\20180109135438_AuthenticationV3.Designer.cs" />
+    <Compile Remove="Migrations\20180109135955_AuthenticationV4.cs" />
+    <Compile Remove="Migrations\20180109135955_AuthenticationV4.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -74,7 +78,12 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Views\Home\" />
+    <Folder Include="Connected Services\" />
     <Folder Include="Resources\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JSONSchema="http://json.schemastore.org/band-manifest" /></VisualStudio></ProjectExtensions>

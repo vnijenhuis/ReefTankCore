@@ -11,7 +11,7 @@
             <a href="@Url.Action("Index", "Category", new {Area = "Admin", Slug = Model.CategorySlug})"><i class="glyphicon glyphicon-chevron-left"></i> <strong>@Model.CategoryName</strong></a>
             <h2>@Model.CommonName</h2><a href="@Url.Action("Add","Creature", new {Id = Model.Id})">Create</a>
             <div>
-                
+                @{Html.RenderPartial("MessageBox");}
             </div>
             <div class="dropdown-header">
                 @Html.Raw(Model.Description)
@@ -38,7 +38,7 @@
                         <td> @creature.Origin </td>
                         <td>
                             <a href="@Url.Action("Edit", "Creature", new {Area = "Admin", Id = creature.Id})"><i class="material-icons md-21">edit</i></a>
-                            <a href="@Url.Action("Delete","Creature")"><i class="material-icons md-21">delete</i></a>
+                            <a href="@Url.Action("Delete","Creature", new {Area = "Admin", Id = creature.Id})"><i class="material-icons md-21">delete</i></a>
                         </td>
                     </tr>
                 }

@@ -1,14 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using ReefTankCore.Models.Enums;
 using ReefTankCore.Models.Users;
+using ReefTankCore.Services.Email;
 using ReefTankCore.Web.Extensions;
+using ReefTankCore.Web.Helpers;
 using ReefTankCore.Web.Models.Account;
-using WebApplication1.Services;
 
 namespace ReefTankCore.Web.Controllers
 {
@@ -21,19 +28,16 @@ namespace ReefTankCore.Web.Controllers
         private readonly IAuthorizationService _authorizationService;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountController(
-            UserManager<User> userManager,
-            SignInManager<User> signInManager,
-            IEmailSender emailSender,
-            ILogger<AccountController> logger,
-            IAuthorizationService authorizationService)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IEmailSender emailSender, ILogger<AccountController> logger, IAuthorizationService authorizationService, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
             _authorizationService = authorizationService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [TempData]
@@ -43,7 +47,7 @@ namespace ReefTankCore.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
-            User u = new User();
+            var u = new User();
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
@@ -64,18 +68,7 @@ namespace ReefTankCore.Web.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    var isAdmin = await _authorizationService.AuthorizeAsync(User, result, "RequireAdmin");
-                    if (isAdmin.Succeeded)
-                    {
-                        _logger.LogInformation("Admin logged in.");
-                        return RedirectToAction("Index", "Home", new { Area = "Admin" });
-                    }
-                    var isReefer = await _authorizationService.AuthorizeAsync(User, result, "RequireReefer");
-                    if (isReefer.Succeeded)
-                    {
-                        _logger.LogInformation("Reefer logged in.");
-                        return RedirectToAction("Index","Home", new { Area = "Reefer"});
-                    }
+                    return RedirectToAction("RedirectUserByType");
                 }
 
                 if (result.IsLockedOut)
@@ -92,6 +85,32 @@ namespace ReefTankCore.Web.Controllers
             return View(model);
         }
 
+        public IActionResult RedirectUserByType()
+        {
+            if (User.IsInRole("SystemOwner"))
+            {
+                _logger.LogInformation("Owner logged in.");
+                return RedirectToAction("Index", "Home", new { Area = "Admin" });
+            }
+
+            //Redirect admin to admin area.
+            if (User.IsInRole("Administrator"))
+            {
+                _logger.LogInformation("Administrator logged in.");
+                return RedirectToAction("Index", "Home", new { Area = "Admin" });
+            }
+
+            //Redirect user with reefer type.
+            if (User.IsInRole("ReefUser"))
+            {
+                _logger.LogInformation("ReefUser logged in.");
+                return RedirectToAction("Index", "Home", new { Area = "Reefer" });
+            }
+
+            return RedirectToAction("Index", "Home", new {Area = ""});
+        }
+
+
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Lockout()
@@ -103,8 +122,13 @@ namespace ReefTankCore.Web.Controllers
         [AllowAnonymous]
         public IActionResult Register(string returnUrl = null)
         {
+            var model = new RegisterViewModel()
+            {
+                GenderItems = GetGenders(),
+            };
+
             ViewData["ReturnUrl"] = returnUrl;
-            return View();
+            return View(model);
         }
 
         [HttpPost]
@@ -115,8 +139,25 @@ namespace ReefTankCore.Web.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = model.Email, Email = model.Email };
+                var user = new User
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Firstname = model.Firstname,
+                    Preposition = model.Preposition,
+                    Surname = model.Surname,
+                    Gender = model.Gender,
+                    DateOfBirth = model.DateOfBirth,
+                    
+                };
                 var result = await _userManager.CreateAsync(user, model.Password);
+
+                // Add role
+                await _userManager.AddToRoleAsync(user, "ReefUser");
+
+                //Add claim
+                await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "ReefUser"));
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
@@ -145,84 +186,84 @@ namespace ReefTankCore.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult ExternalLogin(string provider, string returnUrl = null)
-        //{
-        //    // Request a redirect to the external login provider.
-        //    var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
-        //    var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-        //    return Challenge(properties, provider);
-        //}
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        {
+            // Request a redirect to the external login provider.
+            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return Challenge(properties, provider);
+        }
 
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
-        //{
-        //    if (remoteError != null)
-        //    {
-        //        ErrorMessage = $"Error from external provider: {remoteError}";
-        //        return RedirectToAction(nameof(Login));
-        //    }
-        //    var info = await _signInManager.GetExternalLoginInfoAsync();
-        //    if (info == null)
-        //    {
-        //        return RedirectToAction(nameof(Login));
-        //    }
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        {
+            if (remoteError != null)
+            {
+                ErrorMessage = $"Error from external provider: {remoteError}";
+                return RedirectToAction(nameof(Login));
+            }
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                return RedirectToAction(nameof(Login));
+            }
 
-        //    // Sign in the user with this external login provider if the user already has a login.
-        //    var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
-        //    if (result.Succeeded)
-        //    {
-        //        _logger.LogInformation("User logged in with {Name} provider.", info.LoginProvider);
-        //        return RedirectToLocal(returnUrl);
-        //    }
-        //    if (result.IsLockedOut)
-        //    {
-        //        return RedirectToAction(nameof(Lockout));
-        //    }
-        //    else
-        //    {
-        //        // If the user does not have an account, then ask the user to create an account.
-        //        ViewData["ReturnUrl"] = returnUrl;
-        //        ViewData["LoginProvider"] = info.LoginProvider;
-        //        var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-        //        return View("ExternalLogin", new ExternalLoginViewModel { Email = email });
-        //    }
-        //}
+            // Sign in the user with this external login provider if the user already has a login.
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            if (result.Succeeded)
+            {
+                _logger.LogInformation("User logged in with {Name} provider.", info.LoginProvider);
+                return RedirectToLocal(returnUrl);
+            }
+            if (result.IsLockedOut)
+            {
+                return RedirectToAction(nameof(Lockout));
+            }
+            else
+            {
+                // If the user does not have an account, then ask the user to create an account.
+                ViewData["ReturnUrl"] = returnUrl;
+                ViewData["LoginProvider"] = info.LoginProvider;
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                return View("ExternalLogin", new ExternalLoginViewModel { Email = email });
+            }
+        }
 
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginViewModel model, string returnUrl = null)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        // Get the information about the user from the external login provider
-        //        var info = await _signInManager.GetExternalLoginInfoAsync();
-        //        if (info == null)
-        //        {
-        //            throw new ApplicationException("Error loading external login information during confirmation.");
-        //        }
-        //        var user = new User { UserName = model.Email, Email = model.Email };
-        //        var result = await _userManager.CreateAsync(user);
-        //        if (result.Succeeded)
-        //        {
-        //            result = await _userManager.AddLoginAsync(user, info);
-        //            if (result.Succeeded)
-        //            {
-        //                await _signInManager.SignInAsync(user, isPersistent: false);
-        //                _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
-        //                return RedirectToLocal(returnUrl);
-        //            }
-        //        }
-        //        AddErrors(result);
-        //    }
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginViewModel model, string returnUrl = null)
+        {
+            if (ModelState.IsValid)
+            {
+                // Get the information about the user from the external login provider
+                var info = await _signInManager.GetExternalLoginInfoAsync();
+                if (info == null)
+                {
+                    throw new ApplicationException("Error loading external login information during confirmation.");
+                }
+                var user = new User { UserName = model.Email, Email = model.Email };
+                var result = await _userManager.CreateAsync(user);
+                if (result.Succeeded)
+                {
+                    result = await _userManager.AddLoginAsync(user, info);
+                    if (result.Succeeded)
+                    {
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
+                        return RedirectToLocal(returnUrl);
+                    }
+                }
+                AddErrors(result);
+            }
 
-        //    ViewData["ReturnUrl"] = returnUrl;
-        //    return View(nameof(ExternalLogin), model);
-        //}
+            ViewData["ReturnUrl"] = returnUrl;
+            return View(nameof(ExternalLogin), model);
+        }
 
         [HttpGet]
         [AllowAnonymous]
@@ -352,6 +393,22 @@ namespace ReefTankCore.Web.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+        }
+
+        private static List<SelectListItem> GetGenders()
+        {
+            var list = new List<SelectListItem>();
+
+            foreach (Gender gender in Enum.GetValues(typeof(Gender)))
+            {
+                list.Add(new SelectListItem
+                {
+                    Text = EnumHelper<Gender>.GetDisplayValue(gender),
+                    Value = gender.ToString()
+                });
+            }
+
+            return list;
         }
 
         #endregion

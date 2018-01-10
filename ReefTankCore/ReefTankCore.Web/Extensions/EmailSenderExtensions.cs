@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using WebApplication1.Services;
+using ReefTankCore.Services.Email;
 
-namespace WebApplication1.Services
+namespace ReefTankCore.Web.Extensions
 {
     public static class EmailSenderExtensions
     {

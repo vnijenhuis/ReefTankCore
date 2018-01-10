@@ -17,8 +17,7 @@ using ReefTankCore.Web.Helpers;
 
 namespace ReefTankCore.Web.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    public class CreatureController : Controller
+    public class CreatureController : AdminController
     {
         private readonly IReefService _reefService;
         private readonly IHostingEnvironment _hostingEnvironment;
@@ -30,9 +29,9 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(string slug)
+        public IActionResult Index(Guid id)
         {
-            var subcategory = _reefService.GetSubcategory(slug) ?? _reefService.GetFirstSubcategory();
+            var subcategory = _reefService.GetSubcategory(id) ?? _reefService.GetFirstSubcategory();
 
             var vm = Mapper.Map<Subcategory, SubcategoryDetailsModel>(subcategory);
             vm.Creatures = Mapper.Map<IEnumerable<Creature>, IList<CreatureIndexModel>>(subcategory.Creatures);
@@ -290,7 +289,6 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
 
         public IActionResult Delete(Guid id)
         {
-
             var creature = _reefService.GetCreature(id);
 
             var vm = new DeleteCreatureViewModel()

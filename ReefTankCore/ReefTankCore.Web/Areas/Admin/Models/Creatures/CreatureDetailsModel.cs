@@ -77,7 +77,7 @@ namespace ReefTankCore.Web.Areas.Admin.Models.Creatures
         [Required(ErrorMessage = "Please select a subcategory")]
         public Guid SubcategoryId { get; set; }
 
-        public List<Subcategory> SubcategoryItems;
+        public List<Subcategory> SubcategoryItems { get; set; }
         
         public Guid[] TagList { get; set; }
 

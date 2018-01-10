@@ -7,11 +7,11 @@ using ReefTankCore.Models.Base;
 using ReefTankCore.Services.Context;
 using ReefTankCore.Web.Areas.Admin.Models.Categories;
 using ReefTankCore.Web.Areas.Admin.Models.Subcategories;
+using ReefTankCore.Web.Models;
 
 namespace ReefTankCore.Web.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    public class SubcategoryController : Controller
+    public class SubcategoryController : AdminController
     {
         private readonly IReefService _reefService;
 
@@ -21,9 +21,9 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(string slug)
+        public IActionResult Index(Guid id)
         {
-            var category = _reefService.GetCategory(slug) ?? _reefService.GetFirstCategory();
+            var category = _reefService.GetCategory(id) ?? _reefService.GetFirstCategory();
             var subcategories = _reefService.GetSubcategories(category).ToList();
             var vm = new CategoryDetailsModel()
             {
@@ -35,11 +35,28 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
             return View(vm);
         }
 
+        [HttpGet]
         public IActionResult Add()
         {
-            return View();
+            var vm = new SubcategoryFormModel
+            {
+                CategoryItems = _reefService.GetCategories().ToList()
+            };
+
+            return View(vm);
         }
 
+        [HttpPost]
+        public IActionResult Add(SubcategoryFormModel model)
+        {
+            var subcategory = new Subcategory()
+            {
+                
+            };
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
         public IActionResult Edit(Guid id)
         {
             return View();

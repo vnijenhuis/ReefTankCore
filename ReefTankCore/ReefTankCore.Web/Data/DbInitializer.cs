@@ -1,16 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using ReefTankCore.Models.Base;
 using ReefTankCore.Models.Enums;
+using ReefTankCore.Models.Users;
 using ReefTankCore.Services.Context;
+using ReefTankCore.Web.Controllers;
+using ReefTankCore.Web.Models.Account;
 
 namespace ReefTankCore.Web.Data
 {
     public static class DbInitializer
     {
-        public static void Initialize(ReefContext context)
+        public static void Initialize(ReefContext context, UserManager<User> userManager, RoleManager<Role> roleManager)
         {
             //foreach (var entity in context.References)
             //    context.References.Remove(entity);
