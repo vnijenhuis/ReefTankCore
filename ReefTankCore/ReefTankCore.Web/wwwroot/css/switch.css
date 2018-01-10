@@ -124,16 +124,16 @@
         }
 
         /* Switch Danger */
-        .checkbox.checbox-switch.switch-danger label > input:checked + span,
-        .checkbox-inline.checbox-switch.switch-danger > input:checked + span {
+        .checkbox.checbox-switch.switch-warning label > input:checked + span,
+        .checkbox-inline.checbox-switch.switch-warning > input:checked + span {
             background-color: rgb(200, 35, 51);
             border-color: rgb(200, 35, 51);
             box-shadow: rgb(200, 35, 51) 0px 0px 0px 8px inset;
             transition: border 0.4s ease 0s, box-shadow 0.4s ease 0s, background-color 1.2s ease 0s;
         }
 
-        .checkbox.checbox-switch.switch-danger label > input:checked:disabled + span,
-        .checkbox-inline.checbox-switch.switch-danger > input:checked:disabled + span {
+        .checkbox.checbox-switch.switch-warning label > input:checked:disabled + span,
+        .checkbox-inline.checbox-switch.switch-warning > input:checked:disabled + span {
             background-color: rgb(216, 119, 129);
             border-color: rgb(216, 119, 129);
             box-shadow: rgb(216, 119, 129) 0px 0px 0px 8px inset;
@@ -175,16 +175,16 @@
         }
 
         /* Switch Warning */
-        .checkbox.checbox-switch.switch-warning label > input:checked + span,
-        .checkbox-inline.checbox-switch.switch-warning > input:checked + span {
+        .checkbox.checbox-switch.switch-caution label > input:checked + span,
+        .checkbox-inline.checbox-switch.switch-caution > input:checked + span {
             background-color: rgb(255, 193, 7);
             border-color: rgb(255, 193, 7);
             box-shadow: rgb(255, 193, 7) 0px 0px 0px 8px inset;
             transition: border 0.4s ease 0s, box-shadow 0.4s ease 0s, background-color 1.2s ease 0s;
         }
 
-        .checkbox.checbox-switch.switch-warning label > input:checked:disabled + span,
-        .checkbox-inline.checbox-switch.switch-warning > input:checked:disabled + span {
+        .checkbox.checbox-switch.switch-caution label > input:checked:disabled + span,
+        .checkbox-inline.checbox-switch.switch-caution > input:checked:disabled + span {
             background-color: rgb(226, 195, 102);
             border-color: rgb(226, 195, 102);
             box-shadow: rgb(226, 195, 102) 0px 0px 0px 8px inset;

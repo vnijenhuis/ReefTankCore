@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ReefTank.Models.Base;
 using ReefTankCore.Models.Base;
@@ -6,7 +9,7 @@ using ReefTankCore.Models.Users;
 
 namespace ReefTankCore.Services.Context
 {
-    public class ReefContext : DbContext
+    public class ReefContext : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {
         public DbContextOptions<ReefContext> Options { get; }
 
@@ -17,21 +20,25 @@ namespace ReefTankCore.Services.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Creature>().ToTable("Creature");
-            modelBuilder.Entity<Creature>()
-                .HasOne(x => x.Subcategory)
-                .WithMany(x => x.Creatures)
-                .HasForeignKey(x => x.SubcategoryId);
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Creature>(b =>
+            {
+                b.ToTable("Creature");
+                b.HasOne(x => x.Subcategory)
+                    .WithMany(x => x.Creatures)
+                    .HasForeignKey(x => x.SubcategoryId)
+                    .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Creature>()
-                .HasMany(x => x.CreatureReferences)
-                .WithOne(x => x.Creature)
-                .HasForeignKey(x => x.CreatureId);
+                b.HasMany(x => x.CreatureReferences)
+                    .WithOne(x => x.Creature)
+                    .HasForeignKey(x => x.CreatureId)
+                    .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Creature>()
-                .HasMany(x => x.CreatureTags)
-                .WithOne(x => x.Creature)
-                .HasForeignKey(x => x.CreatureId);
+                b.HasMany(x => x.CreatureTags)
+                    .WithOne(x => x.Creature)
+                    .HasForeignKey(x => x.CreatureId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
 
             modelBuilder.Entity<Media>().ToTable("Media")
                 .HasOne(x => x.Creature)
@@ -40,23 +47,27 @@ namespace ReefTankCore.Services.Context
 
             modelBuilder.Entity<Category>().ToTable("Category")
                 .HasMany(c => c.Subcategories)
-                .WithOne(s => s.Category);
+                .WithOne(s => s.Category)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Subcategory>().ToTable("Subcategory")
                 .HasOne(x => x.Category)
                 .WithMany(x => x.Subcategories)
                 .HasForeignKey(x => new { x.CategoryId })
+                .OnDelete(DeleteBehavior.Cascade)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Tag>().ToTable("Tag")
                 .HasMany(x => x.CreatureTags)
                 .WithOne(x => x.Tag)
-                .HasForeignKey(x => new { x.TagId });
+                .HasForeignKey(x => new { x.TagId })
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Reference>().ToTable("Reference")
                 .HasMany(x => x.CreatureReferences)
                 .WithOne(x => x.Reference)
-                .HasForeignKey(x => new { x.ReferenceId });
+                .HasForeignKey(x => new { x.ReferenceId })
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<CreatureTag>().ToTable("CreatureTag")
                 .HasKey(t => new { t.CreatureId, t.TagId });
@@ -64,7 +75,62 @@ namespace ReefTankCore.Services.Context
             modelBuilder.Entity<CreatureReference>().ToTable("CreatureReference")
                 .HasKey(x => new { x.CreatureId, x.ReferenceId });
 
-            modelBuilder.Entity<User>().ToTable("User");
+            modelBuilder.Entity<User>(b =>
+                {
+                    b.ToTable("User");
+                });
+
+            modelBuilder.Entity<Role>(b =>
+                {
+                    b.ToTable("Role");
+                });
+
+            modelBuilder.Entity<UserRole>(b =>
+            {
+                b.ToTable("UserRole");
+                b.HasOne("ReefTankCore.Models.Users.Role")
+                    .WithMany()
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                b.HasOne("ReefTankCore.Models.Users.User")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<UserClaim>(b =>
+            {
+                b.ToTable("UserClaim");
+                b.HasOne("ReefTankCore.Models.Users.User")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+            modelBuilder.Entity<RoleClaim>(b =>
+            {
+                b.ToTable("RoleClaim");
+                b.HasOne("ReefTankCore.Models.Users.Role")
+                    .WithMany()
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<UserLogin>(b =>
+                {
+                    b.ToTable("UserLogin");
+                    b.HasOne("ReefTankCore.Models.Users.User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity<UserToken>(b =>
+               {
+                   b.ToTable("UserToken");
+                   b.HasOne("ReefTankCore.Models.Users.User")
+                        .WithMany()
+                       .HasForeignKey("UserId");
+               });
         }
 
         public DbSet<Category> Categories { get; set; }

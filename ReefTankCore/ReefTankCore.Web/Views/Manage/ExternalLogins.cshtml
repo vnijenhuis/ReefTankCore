@@ -1,10 +1,10 @@
-﻿@model ExternalLoginsViewModel
+﻿@using ReefTankCore.Web.Views.Manage
+@model ReefTankCore.Web.Models.Manage.ExternalLoginsViewModel
 @{
     ViewData["Title"] = "Manage your external logins";
     ViewData.AddActivePage(ManageNavPages.ExternalLogins);
 }
 
-@Html.Partial("_StatusMessage", Model.StatusMessage)
 @if (Model.CurrentLogins?.Count > 0)
 {
     <h4>Registered Logins</h4>

@@ -1,0 +1,31 @@
+﻿@using ReefTankCore.Models.System.Notifications;
+@using ReefTankCore.Web.Controllers
+
+@{
+    var messages = (IList<MessageViewModel>) TempData[BaseController.Key];
+    if (messages != null)
+    {
+        foreach (var message in messages)
+        {
+            var messageClass = message.Type.ToString();
+
+            if (messageClass == "error")
+            {
+                messageClass = "danger";
+            }
+
+            <div class="alert alert-@messageClass">
+                <p>@Html.Raw(message.Message)</p>
+
+            </div>
+        }
+    }
+
+    var errorSummary = Html.ValidationSummary();
+    if (errorSummary != null && !Html.ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            @Html.ValidationSummary()
+        </div>
+    }
+}

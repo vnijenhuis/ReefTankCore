@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 
 namespace ReefTankCore.Models.Users
 {
-    public class UserRole
+    public class UserRole : IdentityUserRole<Guid>
     {
-        public Guid Id { get; set; }
-
-        public string Name { get; set; }
-
-        public bool IsAssignable { get; set; }
     }
 }

@@ -113,7 +113,7 @@
             <div class="col-md-4">
                 <ul class="list-group">
                     <li class="list-group-item borderless">
-                        <h2>@tagTypeModel.Name</h2>
+                        <h2 class="label-@tagTypeModel.Name.ToLower()">@tagTypeModel.Name</h2>
                     </li>
                     @foreach (var tag in tagTypeModel.Tags)
                     {
@@ -126,7 +126,7 @@
                             }
                         }
                         <li class="list-group-item borderless">
-                            <div class="checkbox checbox-switch switch-info">
+                            <div class="checkbox checbox-switch switch-@tagTypeModel.Name.ToLower()">
                                 <label>
                                     <input type="checkbox" name="TagList" @tagChecked value="@tag.Id" />
                                     <span></span>

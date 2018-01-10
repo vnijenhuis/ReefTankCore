@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace WebApplication1.Services
+namespace ReefTankCore.Services.Email
 {
     public interface IEmailSender
     {
         Task SendEmailAsync(string email, string subject, string message);
+        Task SendSignupEmailASync();
+        Task SendSignupDeniedAsync();
+        Task SendSignupConfirmedAsync();
     }
 }

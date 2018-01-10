@@ -11,6 +11,7 @@
         <div class="panel-heading">
             <h2>Add entry for @Model.SubcategoryCommonName</h2>
         </div>
+        @{Html.RenderPartial("MessageBox");}
         <div class="panel-body">
             @using (Html.BeginForm("Edit", "Creature", FormMethod.Post, new {enctype = "multipart/form-data"}))
             {
