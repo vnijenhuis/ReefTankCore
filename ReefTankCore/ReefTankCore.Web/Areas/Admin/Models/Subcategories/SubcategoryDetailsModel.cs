@@ -14,7 +14,7 @@ namespace ReefTankCore.Web.Areas.Admin.Models.Subcategories
         public string ScientificName { get; set; }
         public string Description { get; set; }
         public IList<CreatureIndexModel> Creatures { get; set; }
-        public string CategorySlug { get; set; }
+        public Guid CategoryId { get; set; }
         public string CategoryName { get; set; }
     }
 }

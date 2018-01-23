@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using ReefTankCore.Models.Base;
 using ReefTankCore.Services.Context;
 using ReefTankCore.Web.Areas.Admin.Models.Categories;
+using ReefTankCore.Web.Areas.Admin.Models.Creatures;
 using ReefTankCore.Web.Areas.Admin.Models.Subcategories;
 using ReefTankCore.Web.Models;
 
@@ -23,15 +24,11 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Index(Guid id)
         {
-            var category = _reefService.GetCategory(id) ?? _reefService.GetFirstCategory();
-            var subcategories = _reefService.GetSubcategories(category).ToList();
-            var vm = new CategoryDetailsModel()
-            {
-                Id = category.Id,
-                Name = category.Name,
-                Slug = category.Slug,
-                Subcategories = Mapper.Map<IEnumerable<Subcategory>, IList<SubcategoryIndexModel>>(subcategories),
-            };
+            var subcategory = _reefService.GetSubcategory(id) ?? _reefService.GetFirstSubcategory();
+
+            var vm = Mapper.Map<Subcategory, SubcategoryDetailsModel>(subcategory);
+            vm.Creatures = Mapper.Map<IEnumerable<Creature>, IList<CreatureIndexModel>>(subcategory.Creatures);
+
             return View(vm);
         }
 

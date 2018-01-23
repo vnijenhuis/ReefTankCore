@@ -12,25 +12,28 @@
         </div>
         <div class="panel-body">
             <div class="row">
-                @using(Html.BeginForm())
-                {
-                    <p>Weet u zeker dat u deze video wilt verwijderen? </p>
-        
-                    <div class="well">
-                        <ul>
-                            <li>@Model.CommonName</li>
-                            <li>@Model.Subcategory>
-                        </ul>
-                    </div>
-     
-                    <div class="alert alert-block">
-                        This species will be removed, this action cannot be reversed.
-                    </div>
-                    @Html.Hidden("confirm", true)
-                    <button type="submit" class="btn btn-danger">Ja, verwijderen</button>
-                    <a href="@Url.Action("Index", "Creature")">Annuleren</a>
-           
-                }
+                <div class="col-md-12">
+                    @using (Html.BeginForm())
+                    {
+                        <p>Are you sure you want to delete this entry? </p>
+
+                        <div class="well">
+                            <ul>
+                                <li>@Model.CommonName</li>
+                                <li>@Model.Subcategory</li>
+                            </ul>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            This species will be removed, this action cannot be reversed.
+                        </div>
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(x => x.SubcategoryId)
+                        @Html.HiddenFor(x => x.Id)
+                        <button type="submit" class="btn btn-danger">Ja, verwijderen</button>
+                        <a href="@Url.Action("Index", "Subcategory", new {Area = "Admin", Id = Model.SubcategoryId})">Annuleren</a>
+                    }
+                </div>
             </div>
         </div>
     </div>

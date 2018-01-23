@@ -1,7 +1,20 @@
-﻿@model ReefTankCore.Web.Areas.Admin.Models.Creatures.CreatureDetailsModel
+﻿@using ReefTankCore.Models.Enums
+@model ReefTankCore.Web.Areas.Admin.Models.Creatures.CreatureDetailsModel
 
-@Html.HiddenFor(x => x.SubcategorySlug)
-@Html.HiddenFor(x => x.CategorySlug)
+@{
+    var name = new Dictionary<string, string>()
+{
+{ "Information", "info" },
+{ "Caution", "caution" },
+{ "Warning", "warning" }
+};
+}
+
+@Html.HiddenFor(x => x.SubcategoryId)
+@Html.HiddenFor(x => x.SubcategoryCommonName)
+@Html.HiddenFor(x => x.SubcategoryItems)
+@Html.HiddenFor(x => x.CategoryName)
+@Html.HiddenFor(x => x.CategoryId)
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
@@ -113,7 +126,7 @@
             <div class="col-md-4">
                 <ul class="list-group">
                     <li class="list-group-item borderless">
-                        <h2 class="label-@tagTypeModel.Name.ToLower()">@tagTypeModel.Name</h2>
+                        <h3><i class="material-icons @name[@tagTypeModel.Name]"></i> @tagTypeModel.Name</h3>
                     </li>
                     @foreach (var tag in tagTypeModel.Tags)
                     {
@@ -126,7 +139,7 @@
                             }
                         }
                         <li class="list-group-item borderless">
-                            <div class="checkbox checbox-switch switch-@tagTypeModel.Name.ToLower()">
+                            <div class="checkbox checbox-switch switch-@name[@tagTypeModel.Name]">
                                 <label>
                                     <input type="checkbox" name="TagList" @tagChecked value="@tag.Id" />
                                     <span></span>
@@ -143,4 +156,4 @@
 
 @Html.AntiForgeryToken()
 <input type="submit" class="btn btn-primary" />
-<a href="@Url.Action("Index", "Creature", new {Area = "Admin", Slug = Model.SubcategorySlug})" class="btn btn-link">Cancel</a>
+<a href="@Url.Action("Index", "Subcategory", new {Area = "Admin", Slug = Model.SubcategoryId})" class="btn btn-link">Cancel</a>

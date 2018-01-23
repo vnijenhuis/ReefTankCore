@@ -34,8 +34,8 @@ namespace ReefTankCore.Web
                 .ForMember(x => x.DifficultyItems, opt => opt.Ignore())
                 .ForMember(x => x.SubcategoryItems, opt => opt.Ignore())
                 .ForMember(x => x.SubcategoryId, opt => opt.MapFrom(x => x.Subcategory.Id))
-                .ForMember(x => x.SubcategorySlug, opt => opt.MapFrom(x => x.Subcategory.Slug))
-                .ForMember(x => x.CategorySlug, opt => opt.MapFrom(x => x.Subcategory.Category.Slug));
+                .ForMember(x => x.CategoryId, opt => opt.MapFrom(x => x.Subcategory.Category.Id))
+                .ForMember(x => x.CategoryName, opt => opt.MapFrom(x => x.Subcategory.Category.Name));
         }
     }
 }

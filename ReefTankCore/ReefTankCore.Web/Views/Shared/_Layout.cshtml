@@ -19,9 +19,9 @@
         <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Home</a>
     </div>
     <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
+        @*<ul class="nav navbar-nav">
             @await Component.InvokeAsync("CategoryMenu")
-        </ul>
+        </ul>*@
         <ul class="nav navbar-nav navbar-right">
             @await Html.PartialAsync("_LoginPartial")
         </ul>

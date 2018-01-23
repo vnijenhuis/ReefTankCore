@@ -9,11 +9,11 @@
 <div class="container">
     <div class="panel panel-info top-buffer">
         <div class="panel-heading">
-            <h2>Add entry for @Model.SubcategoryCommonName</h2>
+            <h2>Create</h2>
         </div>
         @{Html.RenderPartial("MessageBox");}
         <div class="panel-body">
-            @using (Html.BeginForm("Edit", "Creature", FormMethod.Post, new {enctype = "multipart/form-data"}))
+            @using (Html.BeginForm("Create", "Creature", FormMethod.Post, new {enctype = "multipart/form-data"}))
             {
                 Html.RenderPartial("CreatureForm");
             }

@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background-color: #f7f7f7
 }
 
 /* Wrapping element */
@@ -104,4 +105,56 @@ td {
 
 .material-icons.lg-24 {
     font-size: 24px;
+}
+
+.material-icons.caution:after {
+    content: "warning";
+    color: rgb(255, 193, 7);
+}
+
+.material-icons.info:after {
+    content: "info";
+    border-color: rgb(23, 162, 184);
+}
+
+.material-icons.warning:after {
+    content: "error";
+    color: rgb(200, 35, 51);
+}
+
+
+.album {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    background-color: #f7f7f7;
+}
+
+.card {
+    float: left;
+    width: 25%;
+    padding: .75rem;
+    margin-bottom: 2rem;
+    border: 0;
+    background-color: white;
+}
+
+.card > img {
+    margin-bottom: .75rem;
+}
+
+ .card-text {
+    font-size: 85%;
+    margin-top: 0.5rem;
+}
+
+.logo-image {
+    vertical-align: middle;
+    display: table-cell;
+}
+
+.logo-image img {
+    min-width: 270px;
+    min-height: 270px;
+    max-width: 270px;
+    max-height: 270px;
 }

@@ -98,5 +98,11 @@ namespace ReefTankCore.Models.Base
         
         public Guid? SubcategoryId { get; set; }
         public virtual Subcategory Subcategory { get; set; }
+
+        public Creature()
+        {
+            CreatureTags = new List<CreatureTag>();
+            CreatureReferences = new List<CreatureReference>();
+        }
     }
 }

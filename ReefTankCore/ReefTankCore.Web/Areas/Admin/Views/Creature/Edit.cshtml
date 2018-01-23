@@ -9,8 +9,8 @@
 <div class="container">
     <div class="panel panel-info top-buffer">
         <div class="panel-heading">
-            <a href="@Url.Action("Index", "Subcategory", new {Area = "Admin", Slug = Model.SubcategorySlug})"><i class="glyphicon glyphicon-chevron-left"></i> <strong>@Model.SubcategoryCommonName</strong></a>
-            <h2>Edit creature</h2>
+            <a href="@Url.Action("Index", "Subcategory", new {Area = "Admin", Id = Model.SubcategoryId})"><i class="glyphicon glyphicon-chevron-left"></i> <strong>@Model.SubcategoryCommonName</strong></a>
+            <h2>Edit</h2>
         </div>
         @{Html.RenderPartial("MessageBox");}
         <div class="panel-body">

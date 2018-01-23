@@ -21,40 +21,49 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
     {
         private readonly IReefService _reefService;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IEnumService _enumService;
 
-        public CreatureController(IReefService reefService, IHostingEnvironment hostingEnvironment)
+        public CreatureController(IReefService reefService, IHostingEnvironment hostingEnvironment, IEnumService enumService)
         {
             _reefService = reefService;
             _hostingEnvironment = hostingEnvironment;
+            _enumService = enumService;
         }
 
         [HttpGet]
-        public IActionResult Index(Guid id)
-        {
-            var subcategory = _reefService.GetSubcategory(id) ?? _reefService.GetFirstSubcategory();
-
-            var vm = Mapper.Map<Subcategory, SubcategoryDetailsModel>(subcategory);
-            vm.Creatures = Mapper.Map<IEnumerable<Creature>, IList<CreatureIndexModel>>(subcategory.Creatures);
-
-            return View(vm);
-        }
-
-        public IActionResult Add(Guid id)
+        public IActionResult Create(Guid id)
         {
             var subcategory = _reefService.GetSubcategory(id);
 
             var vm = new CreatureDetailsModel()
             {
-                SubcategorySlug = subcategory.Slug,
-                SubcategoryCommonName = subcategory.CommonName,
                 SubcategoryId = subcategory.Id,
-                CategorySlug = subcategory.Category.Slug,
+                SubcategoryCommonName = subcategory.CommonName,
+                CategoryId = subcategory.Category.Id,
+                CategoryName = subcategory.Category.Name,
             };
             vm = GetCreatureModel(null, vm);
 
             return View(vm);
         }
 
+        [HttpPost]
+        public IActionResult Create(CreatureDetailsModel model, IFormFile upload)
+        {
+            var creature = new Creature();
+
+            if (!ModelState.IsValid)
+            {
+                model = GetCreatureModel(creature, model);
+                return View(model);
+            }
+
+             SaveCreatureData(creature, model, upload);
+
+            return RedirectToAction("Index", "Subcategory", new { Area = "Admin", Id = model.SubcategoryId });
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
             var creature = await _reefService.GetCreatureAsync(id);
@@ -69,13 +78,100 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(CreatureDetailsModel model, IFormFile upload)
         {
-            var creature = await _reefService.GetCreatureAsync(model.Id);
+            if (!model.Id.HasValue)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var creature = await _reefService.GetCreatureAsync(model.Id.Value);
+
             if (!ModelState.IsValid)
             {
                 model = GetCreatureModel(creature, model);
                 return View(model);
             }
 
+            SaveCreatureData(creature, model, upload);
+
+            return RedirectToAction("Index", "Subcategory", new { Area = "Admin", Id = model.SubcategoryId });
+        }
+
+        private CreatureDetailsModel GetCreatureModel(Creature creature, CreatureDetailsModel vm)
+        {
+            var category = _reefService.GetCategory(vm.CategoryId);
+            vm.SubcategoryItems = _reefService.GetSubcategories(category).ToList();
+            vm.DifficultyItems = _enumService.GetDifficulties();
+            vm.ReefCompatabilityItems = _enumService.GetReefCompatability();
+            vm.SpecialRequirementItems = _enumService.GetSpecialRequirements();
+            vm.TemperamentItems = _enumService.GetTemperament();
+
+            vm.TagItems = new List<TagTypeViewModel>();
+
+            var tagsByTagType = _reefService.GetTags().GroupBy(x => EnumHelper<TagType>.GetDisplayValue(x.TagType)).ToList();
+
+            foreach (var tagType in tagsByTagType)
+            {
+                var tagtypeModel = new TagTypeViewModel()
+                {
+                    Name = tagType.Key,
+                    Tags = tagType.Select(x => x).ToList(),
+                };
+                vm.TagItems.Add(tagtypeModel);
+            }
+
+            if (vm.TagList == null)
+            {
+                vm.TagList = new Guid[0];
+
+                if (creature != null && creature.CreatureTags.Any())
+                {
+                    var index = 0;
+                    foreach (var creatureTag in creature.CreatureTags)
+                    {
+                        vm.TagList[index] = creatureTag.TagId;
+                        index++;
+                    }
+                }
+            }
+
+            return vm;
+        }
+
+        [HttpGet]
+        public IActionResult Delete(Guid id)
+        {
+            var creature = _reefService.GetCreature(id);
+
+            var vm = new DeleteCreatureViewModel()
+            {
+                Id = creature.Id,
+                CommonName = creature.CommonName,
+                Subcategory = creature.Subcategory.CommonName,
+                SubcategoryId = creature.Subcategory.Id,
+                Genus = creature.Genus,
+                Species = creature.Species,
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(DeleteCreatureViewModel model)
+        {
+            var creature = _reefService.GetCreature(model.Id);
+            if (creature == null)
+            {
+                return RedirectToAction("Index", "Home", new { Area = "Admin"});
+            }
+
+            _reefService.DeleteCreature(creature);
+
+            return RedirectToAction("Index", "Subcategory", new { Id = model.SubcategoryId });
+        }
+
+        private async void SaveCreatureData(Creature creature, CreatureDetailsModel model, IFormFile upload)
+        {
             creature.CommonName = model.CommonName;
             creature.Description = model.Description;
             creature.Diet = model.Diet;
@@ -89,6 +185,7 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
             creature.Temperament = model.Temperament;
             creature.Volume = model.Volume;
             creature.SpecialRequirements = model.SpecialRequirements;
+            creature.SubcategoryId = model.SubcategoryId;
 
             //Update creature image.
             if (upload != null)
@@ -132,8 +229,7 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
 
                 if (model.TagList != null && model.TagList.Any())
                 {
-                    itemsToDelete =
-                        creatureTags.Where(x => !model.TagList.Contains(x.TagId)).ToList();
+                    itemsToDelete = creatureTags.Where(x => !model.TagList.Contains(x.TagId)).ToList();
                 }
 
                 foreach (var tag in itemsToDelete)
@@ -153,6 +249,7 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
                 {
                     var creatureTag = new CreatureTag()
                     {
+                        Creature = creature,
                         CreatureId = creature.Id,
                         TagId = tagId,
                     };
@@ -162,144 +259,6 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
             }
 
             await _reefService.SaveCreatureAsync(creature);
-
-            return RedirectToAction("Index", "Subcategory", new { Area = "Admin", Slug = model.SubcategorySlug });
-        }
-
-        private static List<SelectListItem> GetReefCompatability()
-        {
-            var list = new List<SelectListItem>();
-
-            foreach (ReefCompatability reefCompatability in Enum.GetValues(typeof(ReefCompatability)))
-            {
-                list.Add(new SelectListItem
-                {
-                    Text = EnumHelper<ReefCompatability>.GetDisplayValue(reefCompatability),
-                    Value = reefCompatability.ToString()
-                });
-            }
-
-            return list;
-        }
-
-        private static List<SelectListItem> GetTemperament()
-        {
-            var list = new List<SelectListItem>();
-
-            foreach (Temperament temperament in Enum.GetValues(typeof(Temperament)))
-            {
-                list.Add(new SelectListItem
-                {
-                    Text = EnumHelper<Temperament>.GetDisplayValue(temperament),
-                    Value = temperament.ToString()
-                });
-            }
-
-            return list;
-        }
-
-        private static List<SelectListItem> GetDifficulties()
-        {
-            var list = new List<SelectListItem>();
-
-            foreach (Difficulty difficulty in Enum.GetValues(typeof(Difficulty)))
-            {
-                list.Add(new SelectListItem
-                {
-                    Text = EnumHelper<Difficulty>.GetDisplayValue(difficulty),
-                    Value = difficulty.ToString()
-                });
-            }
-
-            return list;
-        }
-
-        private static List<SelectListItem> GetSpecialRequirements()
-        {
-            var list = new List<SelectListItem>();
-
-            foreach (SpecialRequirements specialRequirements in Enum.GetValues(typeof(SpecialRequirements)))
-            {
-                list.Add(new SelectListItem
-                {
-                    Text = EnumHelper<SpecialRequirements>.GetDisplayValue(specialRequirements),
-                    Value = specialRequirements.ToString()
-                });
-            }
-
-            return list;
-        }
-
-        private static List<SelectListItem> GetTagTypes()
-        {
-            var list = new List<SelectListItem>();
-
-            foreach (TagType tagType in Enum.GetValues(typeof(TagType)))
-            {
-                list.Add(new SelectListItem
-                {
-                    Text = EnumHelper<TagType>.GetDisplayValue(tagType),
-                    Value = tagType.ToString()
-                });
-            }
-
-            return list;
-        }
-
-        private CreatureDetailsModel GetCreatureModel(Creature creature, CreatureDetailsModel vm)
-        {
-            var category = _reefService.GetCategory(vm.CategorySlug);
-            vm.SubcategoryItems = _reefService.GetSubcategories(category).ToList();
-            vm.DifficultyItems = GetDifficulties();
-            vm.ReefCompatabilityItems = GetReefCompatability();
-            vm.SpecialRequirementItems = GetSpecialRequirements();
-            vm.TemperamentItems = GetTemperament();
-            vm.TagList = new Guid[0];
-            vm.TagItems = new List<TagTypeViewModel>();
-
-            var tagsByTagType = _reefService.GetTags().GroupBy(x => EnumHelper<TagType>.GetDisplayValue(x.TagType));
-
-            foreach (var tagType in tagsByTagType)
-            {
-                var tagtypeModel = new TagTypeViewModel()
-                {
-                    Name = tagType.Key,
-                    Tags = tagType.Select(x => x).ToList(),
-                };
-                vm.TagItems.Add(tagtypeModel);
-            }
-
-            if (creature != null)
-            {
-                if (creature.CreatureTags.Any())
-                {
-                    vm.TagList = new Guid[creature.CreatureTags.Count];
-                }
-
-                var index = 0;
-                foreach (var creatureTag in creature.CreatureTags)
-                {
-                    vm.TagList[index] = creatureTag.TagId;
-                    index++;
-                }
-            }
-
-            return vm;
-        }
-
-        public IActionResult Delete(Guid id)
-        {
-            var creature = _reefService.GetCreature(id);
-
-            var vm = new DeleteCreatureViewModel()
-            {
-                CommonName = creature.CommonName,
-                Subcategory = creature.Subcategory.CommonName,
-                Genus = creature.Genus,
-                Species = creature.Species,
-            };
-
-            return View(vm);
         }
     }
 }

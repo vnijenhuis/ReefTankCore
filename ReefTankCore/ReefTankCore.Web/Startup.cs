@@ -15,6 +15,7 @@ using ReefTankCore.Services;
 using ReefTankCore.Services.Context;
 using ReefTankCore.Services.Email;
 using ReefTankCore.Web.Data;
+using ReefTankCore.Web.Helpers;
 
 namespace ReefTankCore.Web
 {
@@ -36,6 +37,7 @@ namespace ReefTankCore.Web
             services.AddMvc();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IReefService, ReefService>();
+            services.AddSingleton<IEnumService, EnumService>();
 
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<ReefContext>()

@@ -164,6 +164,24 @@ namespace ReefTankCore.Services.Context
             _reefContext.SaveChanges();
         }
 
+        public void DeleteCreature(Creature creature)
+        {
+            _reefContext.Creatures.Remove(creature);
+            _reefContext.SaveChanges();
+        }
+
+        public async Task DeleteCreatureAsync(Creature creature)
+        {
+            _reefContext.Creatures.Remove(creature);
+            await _reefContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Creature>> GetCreaturesAsync()
+        {
+            var creatures = await _reefContext.Creatures.ToListAsync();
+            return creatures;
+        }
+
         #region SubcategoryLoader 
 
         /// <summary>

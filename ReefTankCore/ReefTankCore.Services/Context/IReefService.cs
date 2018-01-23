@@ -35,5 +35,8 @@ namespace ReefTankCore.Services.Context
         IEnumerable<CreatureTag> GetCreatureTags(Creature creature);
         void DeleteCreatureTag(CreatureTag tag);
         void SaveCreatureTag(CreatureTag creatureTag);
+        void DeleteCreature(Creature creature);
+        Task DeleteCreatureAsync(Creature creature);
+        Task<IEnumerable<Creature>> GetCreaturesAsync();
     }
 }
