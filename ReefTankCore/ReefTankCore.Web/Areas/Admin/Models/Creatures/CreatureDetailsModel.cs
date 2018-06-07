@@ -9,7 +9,7 @@ namespace ReefTankCore.Web.Areas.Admin.Models.Creatures
 {
     public class CreatureDetailsModel
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
         [Required]
         public string Description { get; set; }
@@ -22,9 +22,7 @@ namespace ReefTankCore.Web.Areas.Admin.Models.Creatures
 
         public string SubcategoryCommonName { get; set; }
 
-        public string SubcategorySlug { get; set; }
-
-        public string CategorySlug { get; set; }
+        public string CategoryName { get; set; }
 
         public string CommonName { get; set; }
 
@@ -82,5 +80,6 @@ namespace ReefTankCore.Web.Areas.Admin.Models.Creatures
         public Guid[] TagList { get; set; }
 
         public List<TagTypeViewModel> TagItems { get; set; }
+        public Guid CategoryId { get; set; }
     }
 }

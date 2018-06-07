@@ -67,7 +67,9 @@
 
   <ItemGroup>
     <None Include="Pages\Components\CategoryMenu\CategoryMenu.cshtml" />
+    <None Include="Pages\Subcategory\Index.cshtml" />
     <None Include="Views\Shared\Components\CategoryMenu\CategoryMenu.cshtml" />
+    <None Include="wwwroot\js\tinymce.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -78,6 +80,7 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Views\Home\" />
+    <Folder Include="Areas\SystemOwner\Data\" />
     <Folder Include="Connected Services\" />
     <Folder Include="Resources\" />
   </ItemGroup>

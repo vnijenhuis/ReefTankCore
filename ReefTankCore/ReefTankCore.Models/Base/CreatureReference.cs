@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using ReefTank.Models.Base;
+using ReefTankCore.Core.Repositories;
 
 namespace ReefTankCore.Models.Base
 {
-    public class CreatureReference
+    public class CreatureReference : IAggregateRoot
     {
         public Guid Id { get; set; }
 

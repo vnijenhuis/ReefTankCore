@@ -18,9 +18,20 @@ namespace ReefTankCore.Web.Controllers
     [AllowAnonymous]
     public class HomeController : Controller
     {
+        private readonly IReefService _reefService;
+
+        public HomeController(IReefService reefService)
+        {
+            _reefService = reefService;
+        }
+
         public IActionResult Index()
         {
-            return View();
+            var categories = _reefService.GetCategories().ToList();
+
+            var vm = Mapper.Map<IEnumerable<Category>, IList<CategoryViewModel>>(categories).OrderBy(x => x.Name);
+
+            return View(vm);
         }
 
         public IActionResult About()

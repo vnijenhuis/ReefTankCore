@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReefTankCore.Models.Base;
 using ReefTankCore.Services.Context;
+using ReefTankCore.Services.Repositories;
 using ReefTankCore.Web.Models;
 
 namespace ReefTankCore.Web.Controllers
@@ -14,29 +15,24 @@ namespace ReefTankCore.Web.Controllers
     [AllowAnonymous]
     public class SubcategoryController : Controller
     {
-        private readonly IReefService _reefService;
-
-        public SubcategoryController(IReefService reefService)
+        private readonly ISubcategoryRepository _subcategoryRepository;
+        public SubcategoryController(ISubcategoryRepository subcategoryRepository)
         {
-            _reefService = reefService;
+            _subcategoryRepository = subcategoryRepository;
         }
 
         public IActionResult Index(Guid id)
         {
-            var subcategory = _reefService.GetSubcategory(id);
-            if (subcategory.Category.Slug != "corals")
+            var subcategory = _subcategoryRepository.GetSubcategory(id);
+            var vm = new SubcategoryViewModel()
             {
-                
-            }
-            var creatures = _reefService.GetCreaturesBySubcategory(subcategory);
-            //var vm = new SubcategoryOverviewViewModel
-            //{
-            //    Id = subcategory.Id,
-            //    CommonName = subcategory.CommonName,
-            //    Creatures = Mapper.Map<IEnumerable<Creature>, IList<CreatureViewModel>>(subcategories),
-            //};
-            //return View(vm);
-            return null;
+                Id = subcategory.Id,
+                CommonName = subcategory.CommonName,
+                ScientificName = subcategory.ScientificName,
+                Description = subcategory.Description,
+                Creatures = Mapper.Map<IEnumerable<Creature>, IList<CreatureViewModel>>(subcategory.Creatures),
+            };
+            return View(vm);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background-color: #f7f7f7
 }
 
 /* Wrapping element */
@@ -49,8 +50,8 @@
 
 .logo {
     display: block;
-    width: 182px;
-    height: 182px;
+    width: 270px;
+    height: 270px;
 }
 
 .btn-file {
@@ -104,4 +105,147 @@ td {
 
 .material-icons.lg-24 {
     font-size: 24px;
+}
+
+.material-icons.caution:after {
+    content: "warning";
+    color: rgb(255, 193, 7);
+}
+
+.material-icons.info:after {
+    content: "info";
+    border-color: rgb(23, 162, 184);
+}
+
+.material-icons.warning:after {
+    content: "error";
+    color: rgb(200, 35, 51);
+}
+
+.album {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    background-color: white;
+    margin-top: -20px;
+}
+
+@media screen and (min-width: 1201px) {
+    .card {
+        width: calc(25% - 10px);
+        height: 330px;
+    }
+    .logo-image img {
+        width: 260px;
+        height: 270px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .card {
+        width: calc(25% - 10px);
+        height: 275px;
+    }
+
+    .logo-image img {
+        width: 210px;
+        height: 220px;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .card {
+        width: calc(33% - 10px);
+        height: 275px;
+    }
+
+    .logo-image img {
+        width: 210px;
+        height: 220px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .card {
+        width: calc(50% - 10px);
+        height: 275px;
+    }
+    .logo-image img {
+        width: 210px;
+        height: 220px;
+    }
+}
+
+.card {
+    float: left;
+    padding: 0.75rem;
+    overflow: hidden;
+    margin: 5px;
+    box-shadow: 2px 2px 2px 2px #bbbbbb;
+    text-align: center;
+}
+
+ .card-text {
+    font-size: 85%;
+    font-weight: bold;
+    margin-top: 1rem;
+}
+
+.lib-panel {
+    margin-bottom: 20px;
+}
+
+.lib-panel img {
+    width: 100%;
+    background-color: transparent;
+}
+
+.lib-panel .row,
+.lib-panel .col-md-6 {
+    padding: 0;
+    background-color: #FFFFFF;
+}
+
+
+.lib-panel .lib-row {
+    padding: 0 20px 0 20px;
+}
+
+.lib-panel .lib-row.lib-header {
+    background-color: #FFFFFF;
+    font-size: 20px;
+    padding: 10px 20px 0 20px;
+}
+
+.lib-panel .lib-row.lib-header .lib-header-seperator {
+    height: 2px;
+    width: 26px;
+    background-color: #d9d9d9;
+    margin: 7px 0 7px 0;
+}
+
+.lib-panel .lib-row.lib-desc {
+    position: relative;
+    height: 100%;
+    display: block;
+    font-size: 13px;
+}
+
+.lib-panel .lib-row.lib-desc a {
+    position: absolute;
+    width: 100%;
+    bottom: 10px;
+    left: 20px;
+}
+
+.row-margin-bottom {
+    margin-bottom: 20px;
+}
+
+.box-shadow {
+    -webkit-box-shadow: 0 0 10px 0 rgba(0,0,0,.10);
+    box-shadow: 0 0 10px 0 rgba(0,0,0,.10);
+}
+
+.no-padding {
+    padding: 0;
 }

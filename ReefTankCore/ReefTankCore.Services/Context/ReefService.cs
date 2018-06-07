@@ -23,13 +23,16 @@ namespace ReefTankCore.Services.Context
             var category = _reefContext.Categories
                 .Include(x => x.Subcategories)
                 .FirstOrDefault(x => x.Slug == slug);
+            LoadIntoCategory(category);
 
             return category;
         }
 
         public IEnumerable<Category> GetCategories()
         {
-            return _reefContext.Categories.Include(x => x.Subcategories);
+            var categories = _reefContext.Categories.Include(x => x.Subcategories).ToList();
+            LoadIntoCategories(categories);
+            return categories;
         }
 
         public Subcategory GetSubcategory(Guid id)
@@ -59,8 +62,10 @@ namespace ReefTankCore.Services.Context
         }
         
         public Category GetCategory(Guid id)
-        { 
-            return _reefContext.Categories.Find(id);
+        {
+            var category = _reefContext.Categories.Find(id);
+            LoadIntoCategory(category);
+            return category;
         }
 
         public IEnumerable<Creature> GetCreatures()
@@ -121,7 +126,9 @@ namespace ReefTankCore.Services.Context
 
         public Category GetFirstCategory()
         {
-            return _reefContext.Categories.FirstOrDefault();
+            var category = _reefContext.Categories.FirstOrDefault();
+            LoadIntoCategory(category);
+            return category;
         }
 
         public void SaveMedia(Media media)
@@ -164,6 +171,42 @@ namespace ReefTankCore.Services.Context
             _reefContext.SaveChanges();
         }
 
+        public void DeleteCreature(Creature creature)
+        {
+            _reefContext.Creatures.Remove(creature);
+            _reefContext.SaveChanges();
+        }
+
+        public async Task DeleteCreatureAsync(Creature creature)
+        {
+            _reefContext.Creatures.Remove(creature);
+            await _reefContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Creature>> GetCreaturesAsync()
+        {
+            var creatures = await _reefContext.Creatures.ToListAsync();
+            return creatures;
+        }
+
+        public async Task SaveCategoryAsync(Category category)
+        {
+            _reefContext.Categories.Update(category);
+            await _reefContext.SaveChangesAsync();
+        }
+
+        public void SaveSubcategory(Subcategory subcategory)
+        {
+            _reefContext.Subcategories.Add(subcategory);
+            _reefContext.SaveChanges();
+        }
+
+        public void UpdateSubcategory(Subcategory subcategory)
+        {
+            _reefContext.Subcategories.Update(subcategory);
+            _reefContext.SaveChanges();
+        }
+
         #region SubcategoryLoader 
 
         /// <summary>
@@ -178,6 +221,10 @@ namespace ReefTankCore.Services.Context
 
             _reefContext.Entry(subcategory)
                 .Reference(x => x.Category)
+                .Load();
+
+            _reefContext.Entry(subcategory)
+                .Reference(x => x.Media)
                 .Load();
         }
         
@@ -235,6 +282,23 @@ namespace ReefTankCore.Services.Context
             {
                 LoadIntoCreature(creature);
             }
+        }
+        #endregion
+
+        #region LoadCategories
+        public void LoadIntoCategories(IList<Category> categories)
+        {
+            foreach (var cat in categories)
+            {
+                LoadIntoCategory(cat);
+            }
+        }
+
+        public void LoadIntoCategory(Category category)
+        {
+            _reefContext.Entry(category)
+                .Reference(x => x.Media)
+                .Load();
         }
 
         #endregion

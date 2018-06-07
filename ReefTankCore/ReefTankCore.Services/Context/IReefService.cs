@@ -27,7 +27,6 @@ namespace ReefTankCore.Services.Context
 
         Subcategory GetFirstSubcategory();
         Category GetFirstCategory();
-
         void SaveMedia(Media media);
         Media GetImage(Guid id);
 
@@ -35,5 +34,11 @@ namespace ReefTankCore.Services.Context
         IEnumerable<CreatureTag> GetCreatureTags(Creature creature);
         void DeleteCreatureTag(CreatureTag tag);
         void SaveCreatureTag(CreatureTag creatureTag);
+        void DeleteCreature(Creature creature);
+        Task DeleteCreatureAsync(Creature creature);
+        Task<IEnumerable<Creature>> GetCreaturesAsync();
+        Task SaveCategoryAsync(Category category);
+        void SaveSubcategory(Subcategory subcategory);
+        void UpdateSubcategory(Subcategory subcategory);
     }
 }

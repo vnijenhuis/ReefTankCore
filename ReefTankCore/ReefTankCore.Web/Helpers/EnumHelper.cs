@@ -9,47 +9,6 @@ namespace ReefTankCore.Web.Helpers
 {
     public class EnumHelper<T>
     {
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <param name="value"></param>
-        ///// <returns></returns>
-        //public static IList<T> GetValues(Enum value)
-        //{
-        //    var enumValues = new List<T>();
-
-        //    foreach (FieldInfo fi in value.GetType().GetFields(BindingFlags.Static | BindingFlags.Public))
-        //    {
-        //        enumValues.Add((T)Enum.Parse(value.GetType(), fi.Name, false));
-        //    }
-        //    return enumValues;
-        //}
-
-        //public static T Parse(string value)
-        //{
-        //    return (T)Enum.Parse(typeof(T), value, true);
-        //}
-
-        ///// <summary>
-        ///// Gets the list of names of each value of the given enum.
-        ///// </summary>
-        ///// <param name="value">Enum</param>
-        ///// <returns></returns>
-        //public static IList<string> GetNames(Enum value)
-        //{
-        //    return value.GetType().GetFields(BindingFlags.Static | BindingFlags.Public).Select(fi => fi.Name).ToList();
-        //}
-
-        ///// <summary>
-        ///// Gets a list of display values of the given enum.
-        ///// </summary>
-        ///// <param name="value">Enum</param>
-        ///// <returns></returns>
-        //public static IList<string> GetDisplayValues(Enum value)
-        //{
-        //    return GetNames(value).Select(obj => GetDisplayValue(Parse(obj))).ToList();
-        //}
-
         /// <summary>
         /// No idea what this does.
         /// </summary>

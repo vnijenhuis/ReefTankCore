@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using ReefTankCore.Models.Users
+@{
     ViewData["Title"] = "Home - " + ViewData["Title"];
     Layout = "~/Views/Shared/_BaseLayout.cshtml";
 }
@@ -7,7 +9,7 @@
 @RenderSection("Head", false)
 
 
-@section Menu
+@section Menu 
 {
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -19,9 +21,7 @@
         <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Home</a>
     </div>
     <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
-            @await Component.InvokeAsync("CategoryMenu")
-        </ul>
+        @await Html.PartialAsync("_UserMenu")
         <ul class="nav navbar-nav navbar-right">
             @await Html.PartialAsync("_LoginPartial")
         </ul>
@@ -31,7 +31,7 @@
 @RenderBody()
 
 @section Scripts
-{
+    {
 
     @RenderSection("Scripts", false)
 

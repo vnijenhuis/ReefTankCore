@@ -9,12 +9,12 @@
 <div class="container">
     <div class="panel panel-info top-buffer">
         <div class="panel-heading">
-            <a href="@Url.Action("Index", "Subcategory", new {Area = "Admin", Slug = Model.SubcategorySlug})"><i class="glyphicon glyphicon-chevron-left"></i> <strong>@Model.SubcategoryCommonName</strong></a>
-            <h2>Edit creature</h2>
+            <a href="@Url.Action("Index", "Subcategory", new {Area = "Admin", Id = Model.SubcategoryId})"><i class="glyphicon glyphicon-chevron-left"></i> <strong>@Model.SubcategoryCommonName</strong></a>
+            <h2>Edit</h2>
         </div>
         @{Html.RenderPartial("MessageBox");}
         <div class="panel-body">
-            @using (Html.BeginForm("Edit", "Creature", FormMethod.Post, new {enctype = "multipart/form-data"}))
+            @using (Html.BeginForm("Edit", "Creature", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 Html.RenderPartial("CreatureForm");
             }
@@ -24,6 +24,8 @@
 
 @section Scripts
     {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.3/tinymce.min.js"></script>
+    <script src="@Url.Content("~/js/tinymce.js")"></script>
     <script>
         $(document).ready(function() {
             $('#filename').val('@Model.FileName');

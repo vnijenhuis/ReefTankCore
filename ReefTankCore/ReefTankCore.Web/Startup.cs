@@ -14,7 +14,10 @@ using ReefTankCore.Models.Users;
 using ReefTankCore.Services;
 using ReefTankCore.Services.Context;
 using ReefTankCore.Services.Email;
+using ReefTankCore.Services.Repositories;
+using ReefTankCore.Services.Services;
 using ReefTankCore.Web.Data;
+using ReefTankCore.Web.Helpers;
 
 namespace ReefTankCore.Web
 {
@@ -31,12 +34,23 @@ namespace ReefTankCore.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ReefContext>(options =>
-            //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("ReefTankCore.Web")));
-            services.AddMvc();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IReefService, ReefService>();
 
+            services.AddMvc();
+
+            //Initialize services.
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IBaseRepository, BaseRepository>();
+            services.AddScoped<ICreatureRepository, CreatureRepository>();
+            services.AddScoped<ISubcategoryRepository, SubcategoryRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ITagRepository, TagRepository>();
+            services.AddScoped<ICreatureTagRepository, CreatureTagRepository>();
+            services.AddScoped<IReefService, ReefService>();
+            services.AddScoped<IMediaService, MediaService>();
+            services.AddSingleton<IEnumService, EnumService>();
+
+            //Initialze user and user role.
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<ReefContext>()
                 .AddDefaultTokenProviders();
@@ -109,20 +123,24 @@ namespace ReefTankCore.Web
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "area",
+                    name: "areas",
                     template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
-                routes.MapRoute(
-                    name: "Admin_Category",
-                    template: "Admin/Category/{action}/{slug?}");
+                //routes.MapRoute(
+                //    name: "Admin_Category",
+                //    template: "Admin/Category/{action}/{slug?}");
 
-                routes.MapRoute(
-                    name: "Subcategory",
-                    template: "Admin/Subcategory/{action}/{slug?}");
+                //routes.MapRoute(
+                //    name: "Subcategory",
+                //    template: "Admin/Subcategory/{action}/{slug?}");
 
-                routes.MapRoute(
-                    name: "Creature",
-                    template: "Admin/Creature/{action}/{id?}");
+                //routes.MapRoute(
+                //    name: "Creature",
+                //    template: "Admin/Creature/{action}/{id?}");
+
+                //routes.MapRoute(
+                //    name: "Category",
+                //    template: "Category/{action}/{id?}");
 
                 routes.MapRoute(
                     name: "default",

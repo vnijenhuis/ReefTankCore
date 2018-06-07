@@ -8,7 +8,7 @@
 <div class="container">
     <div class="panel panel-info top-buffer">
         <div class="panel-heading">
-            <a href="@Url.Action("Index", "Home", new {Area = "Admin" })"><i class="glyphicon glyphicon-chevron-left"></i><strong>Categories</strong></a>
+            <a href="@Url.Action("Index", "Category", new {Area = "Admin" })"><i class="glyphicon glyphicon-chevron-left"></i><strong>Categories</strong></a>
             <h2>@Model.Name</h2>
         </div>
         <div class="panel-body">
@@ -25,13 +25,13 @@
                 @foreach (var sub in Model.Subcategories)
                 {
                     <tr>
-                        <td> @sub.CommonName </td>
-                        <td> @sub.ScientificName </td>
-                        <td> @sub.CreatureCount </td>
+                        <td>@sub.CommonName</td>
+                        <td>@sub.ScientificName</td>
+                        <td>@sub.CreatureCount</td>
                         <td>
-                            <a href="@Url.Action("Index","Creature", new { Area = "Admin", Id = sub.Id})"><i class="material-icons md-21">info</i></a>
-                            <a href="@Url.Action("Edit","Creature", new { Area = "Admin", Id = sub.Id})"><i class="material-icons md-21">edit</i></a>
-                            <a href="@Url.Action("Delete","Creature", new { Area = "Admin", Id = sub.Id})"><i class="material-icons md-21">delete</i></a>
+                            <a href="@Url.Action("Index","Creature", new { Area = "Admin", id = sub.Id})"><i class="material-icons md-21">info</i></a>
+                            <a href="@Url.Action("Edit","Subcategory", new { Area = "Admin", id = sub.Id})"><i class="material-icons md-21">edit</i></a>
+                            <a href="@Url.Action("Delete","Subcategory", new { Area = "Admin", id = sub.Id})"><i class="material-icons md-21">delete</i></a>
                         </td>
                     </tr>
                 }

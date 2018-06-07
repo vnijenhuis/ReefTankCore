@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using ReefTankCore.Core.Repositories;
 using ReefTankCore.Models.Enums;
 
 namespace ReefTankCore.Models.Base
 {
-    public class Creature
+    public class Creature : IAggregateRoot
     {
         public Guid Id { get; set; }
 
@@ -98,5 +99,11 @@ namespace ReefTankCore.Models.Base
         
         public Guid? SubcategoryId { get; set; }
         public virtual Subcategory Subcategory { get; set; }
+
+        public Creature()
+        {
+            CreatureTags = new List<CreatureTag>();
+            CreatureReferences = new List<CreatureReference>();
+        }
     }
 }

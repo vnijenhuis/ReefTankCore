@@ -8,38 +8,28 @@
     @RenderSection("Head", false)
 }
 
-
-
 @section Menu
-    {
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"><i class="glyphicon-edit"></i></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="@Url.Action("Index","Home", new { Area = ""})" class="navbar-brand">Home</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a href="@Url.Action("Index", "Home" , new { Area = "Admin"})">Categories</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    @await Html.PartialAsync("_LoginPartial")
-                </ul>
-            </div>
-        </div>
-    </nav>
+{
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Home</a>
+    </div>
+    <div class="navbar-collapse collapse">
+        @await Html.PartialAsync("_UserMenu")
+        <ul class="nav navbar-nav navbar-right">
+            @await Html.PartialAsync("_LoginPartial")
+        </ul>
+    </div>
 }
 
 @RenderBody()
 
 @section Scripts
-    {
-
+{
     @RenderSection("Scripts", false)
-
 }

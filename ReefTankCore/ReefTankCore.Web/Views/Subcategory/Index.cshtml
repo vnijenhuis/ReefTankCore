@@ -1,0 +1,52 @@
+﻿@model SubcategoryViewModel
+
+@{
+    ViewData["Title"] = "Subcategory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12" data-category="view">
+            <div class="lib-panel">
+                <div class="row box-shadow">
+                    <div class="col-md-3 no-padding">
+                        <img src="@Url.Content(!string.IsNullOrEmpty(Model.Media?.ContentUrl) ? "~" + Model.Media.ContentUrl : "~/images/Placeholders/270x270.png")" alt="Image Placeholder" />
+                    </div>
+                    <div class="col-md-8">
+                        <div class="lib-row lib-header">
+                            @Model.ScientificName - @Model.CommonName
+                            <div class="lib-header-seperator"></div>
+                        </div>
+                        <div class="lib-row lib-desc">
+                            @Html.Raw(Model.Description)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row album">
+        @foreach (var creature in Model.Creatures)
+        {
+            <div class="card">
+                <a href="@Url.Action("Index", "Creature", new {Area = "", id = Model.Id })">
+                    <div class="logo-image">
+                        @if (!string.IsNullOrEmpty(creature.FileName))
+                        {
+                            <img src="@Url.Content(creature.FileName)" alt="" />
+                        }
+                        else
+                        {
+                            <img src="@Url.Content("~/images/Placeholders/270x270.png")" alt="" />
+                        }
+                    </div>
+                </a>
+                <p class="card-text">
+                    @creature.Genus @creature.Species<br />
+                    @creature.CommonName
+                </p>
+            </div>
+        }
+    </div>
+</div>

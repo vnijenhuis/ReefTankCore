@@ -1,4 +1,4 @@
-﻿@model ReefTankCore.Web.Areas.Admin.Models.Subcategories.SubcategoryDetailsModel
+﻿@model ReefTankCore.Web.Areas.Admin.Models.Subcategories.SubcategoryFormModel
 
 @{
     ViewBag.Title = "Creature";
@@ -19,3 +19,8 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.3/tinymce.min.js"></script>
+    <script src="@Url.Content("~/js/tinymce.js")"></script>
+}
