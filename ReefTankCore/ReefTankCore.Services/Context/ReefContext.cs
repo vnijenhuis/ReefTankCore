@@ -9,7 +9,7 @@ using ReefTankCore.Models.Users;
 
 namespace ReefTankCore.Services.Context
 {
-    public class ReefContext : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>, IReefContext
+    public class ReefContext : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {
         public DbContextOptions<ReefContext> Options { get; }
 
