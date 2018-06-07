@@ -71,17 +71,18 @@
 <div class="album text-muted">
     <div class="row">
         <div class="container">
-            @foreach (var category in Model)
-            {
-                <div class="card">
-                    <a href="@Url.Action("Index", "Category", new {Area = "", Id = category.Id})">
-                        <div class="logo-image">
-                            <img src="@Url.Content("~/images/Placeholders/270x270.png")" alt="Image Placeholder"/>
-                        </div>
-                    </a>
-                    <p class="card-text">@category.Name</p>
-                </div>
-            }
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            var category = Model.ToList()[i];
+            <div class="card">
+                <a href="@Url.Action("Index", "Category", new {Area = "", Id = category.Id})">
+                    <div class="logo-image">
+                        <img src="@Url.Content(!string.IsNullOrEmpty(category.Media?.ContentUrl) ? "~" + category.Media.ContentUrl : "~/images/Placeholders/270x270.png")" alt="Image Placeholder"/>
+                    </div>
+                </a>
+                <p class="card-text">@category.Name</p>
+            </div>
+        }
         </div>
     </div>
 </div>

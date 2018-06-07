@@ -47,11 +47,17 @@ namespace ReefTankCore.Web.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Description");
+
+                    b.Property<Guid?>("MediaId");
+
                     b.Property<string>("Name");
 
                     b.Property<string>("Slug");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MediaId");
 
                     b.ToTable("Category");
                 });
@@ -111,9 +117,7 @@ namespace ReefTankCore.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MediaId")
-                        .IsUnique()
-                        .HasFilter("[MediaId] IS NOT NULL");
+                    b.HasIndex("MediaId");
 
                     b.HasIndex("SubcategoryId");
 
@@ -157,11 +161,9 @@ namespace ReefTankCore.Web.Migrations
 
                     b.Property<string>("ContentType");
 
-                    b.Property<Guid?>("CreatureId");
-
                     b.Property<string>("Filename");
 
-                    b.Property<byte[]>("Image");
+                    b.Property<string>("Url");
 
                     b.HasKey("Id");
 
@@ -179,6 +181,8 @@ namespace ReefTankCore.Web.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<Guid?>("MediaId");
+
                     b.Property<string>("ScientificName");
 
                     b.Property<string>("Slug");
@@ -186,6 +190,8 @@ namespace ReefTankCore.Web.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("MediaId");
 
                     b.ToTable("Subcategory");
                 });
@@ -374,11 +380,18 @@ namespace ReefTankCore.Web.Migrations
                     b.ToTable("UserToken");
                 });
 
+            modelBuilder.Entity("ReefTankCore.Models.Base.Category", b =>
+                {
+                    b.HasOne("ReefTankCore.Models.Base.Media", "Media")
+                        .WithMany()
+                        .HasForeignKey("MediaId");
+                });
+
             modelBuilder.Entity("ReefTankCore.Models.Base.Creature", b =>
                 {
                     b.HasOne("ReefTankCore.Models.Base.Media", "Media")
-                        .WithOne("Creature")
-                        .HasForeignKey("ReefTankCore.Models.Base.Creature", "MediaId");
+                        .WithMany()
+                        .HasForeignKey("MediaId");
 
                     b.HasOne("ReefTankCore.Models.Base.Subcategory", "Subcategory")
                         .WithMany("Creatures")
@@ -418,6 +431,10 @@ namespace ReefTankCore.Web.Migrations
                         .WithMany("Subcategories")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ReefTankCore.Models.Base.Media", "Media")
+                        .WithMany()
+                        .HasForeignKey("MediaId");
                 });
 
             modelBuilder.Entity("ReefTankCore.Models.Users.RoleClaim", b =>

@@ -1,0 +1,49 @@
+﻿@model ReefTankCore.Web.Areas.Admin.Models.Subcategories.SubcategoryDetailsModel
+
+@{
+    ViewBag.Title = "Subcategory";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="panel panel-info top-buffer">
+        <div class="panel-heading">
+            <a href="@Url.Action("Index", "Category", new {Area = "Admin", id = Model.CategoryId})"><i class="glyphicon glyphicon-chevron-left"></i> <strong>@Model.CategoryName</strong></a>
+            <h2>@Model.CommonName</h2><a href="@Url.Action("Create","Creature", new {id = Model.Id})">Create</a>
+            <div>
+                @{Html.RenderPartial("MessageBox");}
+            </div>
+            <div class="dropdown-header">
+                @Html.Raw(Model.Description)
+            </div>
+        </div>
+        <div class="panel-body">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Common name</th>
+                    <th>Genus</th>
+                    <th>Species</th>
+                    <th>Origin</th>
+                    <th>Options</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var creature in Model.Creatures)
+                {
+                    <tr>
+                        <td> @creature.CommonName </td>
+                        <td> @creature.Genus </td>
+                        <td> @creature.Species </td>
+                        <td> @creature.Origin </td>
+                        <td>
+                            <a href="@Url.Action("Edit", "Creature", new {Area = "Admin", id = creature.Id})"><i class="material-icons md-21">edit</i></a>
+                            <a href="@Url.Action("Delete","Creature", new {Area = "Admin", id = creature.Id})"><i class="material-icons md-21">delete</i></a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

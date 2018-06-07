@@ -1,4 +1,37 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ReefTankCore.Web.Areas.Admin.Models.Categories.CategoryEditViewModel
+
+@Html.HiddenFor(x => x.Id)
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(x => x.Name, "Common name")
+            @Html.TextBoxFor(x => x.Name, new { Class = "form-control" })
+        </div>
+        <div class="form-group">
+            <label>Upload Image</label>
+            <div class="input-group">
+                <span class="input-group-btn">
+                    <span class="btn btn-default btn-file">
+                        Browse…
+                        <input type="file" name="upload" id="imgInp">
+                    </span>
+                </span>
+                <input type="text" id="filename" class="form-control" readonly>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <label>Logo</label>
+        <img class="logo img-responsive img-thumbnail" id="creature" src='@Url.Content(Model.ContentUrl)' alt="Image" />
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.LabelFor(x => x.Description)
+            @Html.TextAreaFor(x => x.Description, 15, 10, new { Class = "form-control editor" })
+        </div>
+    </div>
+</div>
+
+@Html.AntiForgeryToken()
+<input type="submit" class="btn btn-primary" />
+<a href="@Url.Action("Index", "Home", new {Area = "Admin" })" class="btn btn-link">Cancel</a>

@@ -27,7 +27,7 @@ namespace ReefTankCore.Web.Controllers
 
         public IActionResult Index()
         {
-            var categories = _reefService.GetCategories();
+            var categories = _reefService.GetCategories().ToList();
 
             var vm = Mapper.Map<IEnumerable<Category>, IList<CategoryViewModel>>(categories).OrderBy(x => x.Name);
 

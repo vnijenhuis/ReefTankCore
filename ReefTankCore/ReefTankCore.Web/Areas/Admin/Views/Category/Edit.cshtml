@@ -1,4 +1,50 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ReefTankCore.Web.Areas.Admin.Models.Categories.CategoryEditViewModel
+@{
+    ViewBag.Title = "Category";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <div class="panel panel-info top-buffer">
+        <div class="panel-heading">
+            <a href="@Url.Action("Index", "Category", new {Area = "Admin", Id = Model.Id})"><i class="glyphicon glyphicon-chevron-left"></i> <strong>@Model.Name</strong></a>
+            <h2>Edit</h2>
+        </div>
+        @{Html.RenderPartial("MessageBox");}
+        <div class="panel-body">
+            @using (Html.BeginForm("Edit", "Category", FormMethod.Post, new { enctype = "multipart/form-data", Area = "Admin" }))
+            {
+                Html.RenderPartial("CategoryForm");
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.3/tinymce.min.js"></script>
+    <script src="@Url.Content("~/js/tinymce.js")"></script>
+    <script>
+        $(document).ready(function() {
+            $('#filename').val('@Model.FileName');
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#creature').attr('src', e.target.result);
+                    $('#filename').val(input.files[0].name);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#imgInp").change(function () {
+            readURL(this);
+        });
+    </script>
+}

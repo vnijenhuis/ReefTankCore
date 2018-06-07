@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ReefTankCore.Core.Repositories;
 
 namespace ReefTankCore.Models.Base
 {
-    public class Media
+    public class Media : IAggregateRoot
     {
         public Guid Id { get; set; }
 
@@ -12,9 +13,6 @@ namespace ReefTankCore.Models.Base
 
         public string ContentType { get; set; }
 
-        public byte[] Image { get; set; }
-
-        public Guid? CreatureId { get; set; }
-        public virtual Creature Creature { get; set; }
+        public string Url { get; set; }
     }
 }

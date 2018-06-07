@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReefTankCore.Models.Base;
 using ReefTankCore.Services.Context;
+using ReefTankCore.Services.Repositories;
 using ReefTankCore.Web.Areas.Admin.Models;
 using ReefTankCore.Web.Models;
 
@@ -15,25 +16,22 @@ namespace ReefTankCore.Web.Controllers
     [AllowAnonymous]
     public class CategoryController : Controller
     {
-        private readonly IReefService _reefService;
-        private readonly ReefContext _reefContext;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public CategoryController(IReefService reefService, ReefContext reefContext)
+        public CategoryController(ICategoryRepository categoryRepository)
         {
-            _reefService = reefService;
-            _reefContext = reefContext;
+            _categoryRepository = categoryRepository;
         }
 
+        [HttpGet]
         public IActionResult Index(Guid id)
         {
-            var category = _reefService.GetCategory(id);
-            var subcategories = _reefService.GetSubcategories(category);
-            var vm = new CategoryViewModel
-            {
-                Id = category.Id,
-                Name = category.Name,
-                Subcategories = Mapper.Map<IEnumerable<Subcategory>, IList<SubcategoryViewModel>>(subcategories),
-            };
+            var category = _categoryRepository.GetCategory(id);
+            var subcategories = category.Subcategories.ToList();
+
+            var vm = Mapper.Map<Category, CategoryViewModel>(category);
+            vm.Subcategories = Mapper.Map<IEnumerable<Subcategory>, IList<SubcategoryListViewModel>>(subcategories);
+
             return View(vm);
         }
         

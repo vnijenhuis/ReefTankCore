@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using ReefTankCore.Core.Repositories;
 using ReefTankCore.Models.Enums;
 
 namespace ReefTankCore.Models.Base
 {
-    public class Creature
+    public class Creature : IAggregateRoot
     {
         public Guid Id { get; set; }
 

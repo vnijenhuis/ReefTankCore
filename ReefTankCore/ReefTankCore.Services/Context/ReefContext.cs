@@ -9,7 +9,7 @@ using ReefTankCore.Models.Users;
 
 namespace ReefTankCore.Services.Context
 {
-    public class ReefContext : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
+    public class ReefContext : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>, IReefContext
     {
         public DbContextOptions<ReefContext> Options { get; }
 
@@ -38,12 +38,13 @@ namespace ReefTankCore.Services.Context
                     .WithOne(x => x.Creature)
                     .HasForeignKey(x => x.CreatureId)
                     .OnDelete(DeleteBehavior.Cascade);
+                b.HasOne(x => x.Media);
             });
 
-            modelBuilder.Entity<Media>().ToTable("Media")
-                .HasOne(x => x.Creature)
-                .WithOne(x => x.Media)
-                .HasForeignKey<Creature>(x => new { x.MediaId });
+            //modelBuilder.Entity<Media>().ToTable("Media")
+            //    .HasOne(x => x.Creature)
+            //    .WithOne(x => x.Media)
+            //    .HasForeignKey<Creature>(x => new { x.MediaId });
 
             modelBuilder.Entity<Category>().ToTable("Category")
                 .HasMany(c => c.Subcategories)

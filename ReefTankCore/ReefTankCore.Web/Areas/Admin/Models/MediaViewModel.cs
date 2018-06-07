@@ -2,8 +2,8 @@
 {
     public class MediaViewModel
     {
-        public string Url { get; set; }
-
         public string Filename { get; set; }
+
+        public string ContentUrl { get; set; }
     }
 }

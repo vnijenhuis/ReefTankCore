@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using ReefTankCore.Models.Base;
 using ReefTankCore.Models.Enums;
 using ReefTankCore.Services.Context;
+using ReefTankCore.Services.Repositories;
 using ReefTankCore.Web.Areas.Admin.Models.Creatures;
 using ReefTankCore.Web.Areas.Admin.Models.Subcategories;
 using ReefTankCore.Web.Helpers;
@@ -19,21 +20,43 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
 {
     public class CreatureController : AdminController
     {
-        private readonly IReefService _reefService;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IEnumService _enumService;
+        private readonly IMediaService _mediaService;
+        private readonly ICreatureRepository _creatureRepository;
+        private readonly ISubcategoryRepository _subcategoryRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly ITagRepository _tagRepository;
+        private readonly ICreatureTagRepository _creatureTagRepository;
+        private const string Directory = "/images/Creatures/";
 
-        public CreatureController(IReefService reefService, IHostingEnvironment hostingEnvironment, IEnumService enumService)
+        public CreatureController(IHostingEnvironment hostingEnvironment, IEnumService enumService, IMediaService mediaService, ICreatureRepository creatureRepository, ISubcategoryRepository subcategoryRepository, ICategoryRepository categoryRepository, ITagRepository tagRepository, ICreatureTagRepository creatureTagRepository)
         {
-            _reefService = reefService;
             _hostingEnvironment = hostingEnvironment;
             _enumService = enumService;
+            _mediaService = mediaService;
+            _creatureRepository = creatureRepository;
+            _subcategoryRepository = subcategoryRepository;
+            _categoryRepository = categoryRepository;
+            _tagRepository = tagRepository;
+            _creatureTagRepository = creatureTagRepository;
+        }
+
+        [HttpGet]
+        public IActionResult Index(Guid id)
+        {
+            var subcategory = _subcategoryRepository.GetSubcategory(id) ?? _subcategoryRepository.GetFirstSubcategory();
+
+            var vm = Mapper.Map<Subcategory, SubcategoryDetailsModel>(subcategory);
+            vm.Creatures = Mapper.Map<IEnumerable<Creature>, IList<CreatureIndexModel>>(_creatureRepository.GetCreatures().ToList());
+
+            return View(vm);
         }
 
         [HttpGet]
         public IActionResult Create(Guid id)
         {
-            var subcategory = _reefService.GetSubcategory(id);
+            var subcategory = _subcategoryRepository.GetSubcategory(id);
 
             var vm = new CreatureDetailsModel()
             {
@@ -42,6 +65,7 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
                 CategoryId = subcategory.Category.Id,
                 CategoryName = subcategory.Category.Name,
             };
+
             vm = GetCreatureModel(null, vm);
 
             return View(vm);
@@ -60,13 +84,13 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
 
              SaveCreatureData(creature, model, upload);
 
-            return RedirectToAction("Index", "Subcategory", new { Area = "Admin", Id = model.SubcategoryId });
+            return RedirectToAction("Index", "Creature", new { Area = "Admin", Id = model.SubcategoryId });
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var creature = await _reefService.GetCreatureAsync(id);
+            var creature = await _creatureRepository.GetCreatureAsync(id);
 
             var vm = Mapper.Map<Creature, CreatureDetailsModel>(creature);
             vm = GetCreatureModel(creature, vm);
@@ -83,7 +107,7 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var creature = await _reefService.GetCreatureAsync(model.Id.Value);
+            var creature = await _creatureRepository.GetCreatureAsync(model.Id.Value);
 
             if (!ModelState.IsValid)
             {
@@ -93,13 +117,13 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
 
             SaveCreatureData(creature, model, upload);
 
-            return RedirectToAction("Index", "Subcategory", new { Area = "Admin", Id = model.SubcategoryId });
+            return RedirectToAction("Index", "Creature", new { Area = "Admin", Id = model.SubcategoryId });
         }
 
         private CreatureDetailsModel GetCreatureModel(Creature creature, CreatureDetailsModel vm)
         {
-            var category = _reefService.GetCategory(vm.CategoryId);
-            vm.SubcategoryItems = _reefService.GetSubcategories(category).ToList();
+            var category = _categoryRepository.GetCategory(vm.CategoryId);
+            vm.SubcategoryItems = _subcategoryRepository.GetSubcategories(category.Id).ToList();
             vm.DifficultyItems = _enumService.GetDifficulties();
             vm.ReefCompatabilityItems = _enumService.GetReefCompatability();
             vm.SpecialRequirementItems = _enumService.GetSpecialRequirements();
@@ -107,7 +131,7 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
 
             vm.TagItems = new List<TagTypeViewModel>();
 
-            var tagsByTagType = _reefService.GetTags().GroupBy(x => EnumHelper<TagType>.GetDisplayValue(x.TagType)).ToList();
+            var tagsByTagType = _tagRepository.FindAll().GroupBy(x => EnumHelper<TagType>.GetDisplayValue(x.TagType)).ToList();
 
             foreach (var tagType in tagsByTagType)
             {
@@ -125,12 +149,7 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
 
                 if (creature != null && creature.CreatureTags.Any())
                 {
-                    var index = 0;
-                    foreach (var creatureTag in creature.CreatureTags)
-                    {
-                        vm.TagList[index] = creatureTag.TagId;
-                        index++;
-                    }
+                    vm.TagList = creature.CreatureTags.Select(x => x.Id).ToArray();
                 }
             }
 
@@ -140,7 +159,7 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Delete(Guid id)
         {
-            var creature = _reefService.GetCreature(id);
+            var creature = _creatureRepository.GetCreatureAsync(id).Result;
 
             var vm = new DeleteCreatureViewModel()
             {
@@ -159,18 +178,18 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(DeleteCreatureViewModel model)
         {
-            var creature = _reefService.GetCreature(model.Id);
+            var creature = _creatureRepository.GetCreature(model.Id);
             if (creature == null)
             {
                 return RedirectToAction("Index", "Home", new { Area = "Admin"});
             }
 
-            _reefService.DeleteCreature(creature);
+            _creatureRepository.Remove(creature);
 
-            return RedirectToAction("Index", "Subcategory", new { Id = model.SubcategoryId });
+            return RedirectToAction("Index", "Creature", new { Id = model.SubcategoryId });
         }
 
-        private async void SaveCreatureData(Creature creature, CreatureDetailsModel model, IFormFile upload)
+        private void SaveCreatureData(Creature creature, CreatureDetailsModel model, IFormFile upload)
         {
             creature.CommonName = model.CommonName;
             creature.Description = model.Description;
@@ -190,7 +209,7 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
             //Update creature image.
             if (upload != null)
             {
-                var webRoot = _hostingEnvironment.WebRootPath + "/images/Creatures/";
+                var webRoot = _hostingEnvironment.WebRootPath + Directory;
 
                 var path = Path.Combine(webRoot, upload.FileName);
                 if (!System.IO.File.Exists(path))
@@ -207,9 +226,9 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
                 {
                     var media = new Media()
                     {
-                        CreatureId = creature.Id,
                         ContentType = upload.ContentType,
                         Filename = upload.FileName,
+                        Url = Directory
                     };
                     creature.Media = media;
                 }
@@ -218,10 +237,11 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
                 {
                     creature.Media.ContentType = upload.ContentType;
                     creature.Media.Filename = upload.FileName;
+                    creature.Media.Url = Directory;
                 }
             }
 
-            var creatureTags = _reefService.GetCreatureTags(creature).ToList();
+            var creatureTags = creature.CreatureTags.ToList();
 
             if (creatureTags.Any())
             {
@@ -234,7 +254,7 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
 
                 foreach (var tag in itemsToDelete)
                 {
-                    _reefService.DeleteCreatureTag(tag);
+                    _creatureRepository.DeleteCreatureTag(tag);
                     creatureTags.Remove(tag);
                 }
             }
@@ -242,23 +262,37 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
             if (model.TagList != null)
             {
                 // Check which tags are already coupled to this creature and which tags stay coupled. these can be ignored. 
-                var newTagIds = model.TagList.Where(x => creatureTags.All(sa => sa.TagId != x));
+                var newTagIds = model.TagList.Where(x => creatureTags.All(sa => sa.TagId != x)).ToList();
 
                 //Couple checked activities to the student group.
                 foreach (var tagId in newTagIds)
                 {
                     var creatureTag = new CreatureTag()
                     {
-                        Creature = creature,
                         CreatureId = creature.Id,
                         TagId = tagId,
                     };
 
-                    _reefService.SaveCreatureTag(creatureTag);
+                    _creatureTagRepository.Add(creatureTag);
                 }
             }
 
-            await _reefService.SaveCreatureAsync(creature);
+            _creatureRepository.Save(creature);
+        }
+
+        private Creature SaveImage(IFormFile upload, Creature creature)
+        {
+            //File upload
+            var dir = "/images/Categories/" + creature.Subcategory.Category.Name + "/" + creature.Subcategory.CommonName + "/";
+            if (upload != null)
+            {
+                if (creature.Media == null || upload.FileName != creature.Media?.Filename)
+                {
+                    var media = _mediaService.InsertMedia(upload, dir);
+                    creature.Media = media;
+                }
+            }
+            return creature;
         }
     }
 }

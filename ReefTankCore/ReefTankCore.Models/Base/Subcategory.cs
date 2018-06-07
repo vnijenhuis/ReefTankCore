@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using ReefTankCore.Core.Repositories;
 
 namespace ReefTankCore.Models.Base
 {
     /// <summary>
     /// The subcategory class is used to categorize marine life by scientific name.
     /// </summary>
-    public class Subcategory
+    public class Subcategory : IAggregateRoot
     {
         public virtual Guid Id { get; set; }
 
@@ -22,5 +23,8 @@ namespace ReefTankCore.Models.Base
 
         public Guid? CategoryId { get; set; }
         public virtual Category Category { get; set; }
+
+        public Guid? MediaId { get; set; }
+        public virtual Media Media { get; set; }
     }
 }

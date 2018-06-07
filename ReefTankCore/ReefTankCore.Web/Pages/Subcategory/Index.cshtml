@@ -1,0 +1,52 @@
+﻿@model ReefTankCore.Web.Models.SubcategoryViewModel
+
+@{
+    ViewData["Title"] = "Subcategory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-md-12" data-category="view">
+    <div class="lib-panel">
+        <div class="row box-shadow">
+            <div class="col-md-3 no-padding logo">
+                <img src="@Url.Content("~/images/Placeholders/270x270.png")" alt="image">
+            </div>
+            <div class="col-md-8">
+                <div class="lib-row lib-header">
+                    @Model.ScientificName
+                    <div class="lib-header-seperator"></div>
+                </div>
+                <div class="lib-row lib-desc">
+                    @Model.Description
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="album text-muted">
+    <div class="row">
+        <div class="container">
+            @for (int i = 0; i < Model.Creatures.Count(); i++)
+            {
+                var creature = Model.Creatures[i];
+                if (i == 0 || i % 4 == 0)
+                {
+                    @Html.Raw("<div class='album-row'>")
+                }
+                <div class="card">
+                    <a href="@Url.Action("Index", "Creature", new {Area = "", Id = creature.Id })">
+                        <div class="logo-image box-shadow">
+                            <img src="@Url.Content("~/images/Placeholders/270x270.png")" alt="Image Placeholder" />
+                        </div>
+                    </a>
+                    <p class="card-text">@creature.Genus @creature.Species - @creature.CommonName</p>
+                </div>
+                if (i % 4 == 3 || i == Model.Creatures.Count - 1)
+                {
+                    @Html.Raw("</div>")
+                }
+            }
+        </div>
+    </div>
+</div>

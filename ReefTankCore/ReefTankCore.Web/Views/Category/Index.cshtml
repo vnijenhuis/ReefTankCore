@@ -4,25 +4,48 @@
     ViewData["Title"] = "Category";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <div class="container">
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <div class="row">
-                <div class="col-md-4">
-                    <h1>@Model.Name</h1>
+    <div class="row">
+        <div class="col-md-12" data-category="view">
+            <div class="lib-panel">
+                <div class="row box-shadow">
+                    <div class="col-md-3 no-padding">
+                        <img src="@Url.Content(!string.IsNullOrEmpty(Model.Media?.ContentUrl) ? "~" + Model.Media.ContentUrl : "~/images/Placeholders/270x270.png")" alt="Image Placeholder" />
+                    </div>
+                    <div class="col-md-8">
+                        <div class="lib-row lib-header">
+                            @Model.Name
+                            <div class="lib-header-seperator"></div>
+                        </div>
+                        <div class="lib-row lib-desc">
+                            @Html.Raw(Model.Description)
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="panel-body">
-            <div class="row">
-                @foreach (var m in Model.Subcategories)
-                {
-                    <div xlass="col-md-3">
-                        @m.CommonName
+    </div>
+    <div class="row album">
+        @foreach (var subcategory in Model.Subcategories)
+        {
+            <div class="card">
+                <a href="@Url.Action("Index", "Subcategory", new {Area = "", Id = subcategory.Id })">
+                    <div class="logo-image">
+                        @if (!string.IsNullOrEmpty(subcategory.Media?.ContentUrl))
+                        {
+                            <img src="@Url.Content(subcategory.Media.ContentUrl)" alt=""/>
+                        }
+                        else
+                        {
+                            <img src="@Url.Content("~/images/Placeholders/270x270.png")" alt=""/>
+                        }
                     </div>
-                }
+                </a>
+                <p class="card-text">
+                    @subcategory.ScientificName <br />
+                    @subcategory.CommonName
+                </p>
             </div>
-        </div>
+        }
     </div>
 </div>

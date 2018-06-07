@@ -14,7 +14,7 @@
         </div>
         @{Html.RenderPartial("MessageBox");}
         <div class="panel-body">
-            @using (Html.BeginForm("Edit", "Creature", FormMethod.Post, new {enctype = "multipart/form-data"}))
+            @using (Html.BeginForm("Edit", "Creature", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 Html.RenderPartial("CreatureForm");
             }
@@ -24,6 +24,8 @@
 
 @section Scripts
     {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.3/tinymce.min.js"></script>
+    <script src="@Url.Content("~/js/tinymce.js")"></script>
     <script>
         $(document).ready(function() {
             $('#filename').val('@Model.FileName');

@@ -92,7 +92,6 @@ namespace ReefTankCore.Web.Areas.Api
                 {
                     var media = new Media()
                     {
-                        CreatureId = creature.Id,
                         ContentType = upload.ContentType,
                         Filename = upload.FileName,
                     };
