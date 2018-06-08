@@ -149,7 +149,7 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
 
                 if (creature != null && creature.CreatureTags.Any())
                 {
-                    vm.TagList = creature.CreatureTags.Select(x => x.Id).ToArray();
+                    vm.TagList = creature.CreatureTags.Select(x => x.TagId).ToArray();
                 }
             }
 

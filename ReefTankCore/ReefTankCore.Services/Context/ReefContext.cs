@@ -71,10 +71,10 @@ namespace ReefTankCore.Services.Context
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<CreatureTag>().ToTable("CreatureTag")
-                .HasKey(t => new { t.CreatureId, t.TagId });
+                .HasKey(t => new { t.Id });
 
             modelBuilder.Entity<CreatureReference>().ToTable("CreatureReference")
-                .HasKey(x => new { x.CreatureId, x.ReferenceId });
+                .HasKey(x => new { x.Id });
 
             modelBuilder.Entity<User>(b =>
                 {

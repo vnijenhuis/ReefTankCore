@@ -21,27 +21,27 @@ namespace ReefTankCore.Web.Data
     {
         public static void Initialize(ReefContext context, UserManager<User> userManager, RoleManager<Role> roleManager)
         {
-            //foreach (var entity in context.References)
-            //    context.References.Remove(entity);
-            //context.SaveChanges();
+            foreach (var entity in context.References)
+                context.References.Remove(entity);
+            context.SaveChanges();
 
-            //foreach (var entity in context.Tags)
-            //    context.Tags.Remove(entity);
-            //context.SaveChanges();
+            foreach (var entity in context.Tags)
+                context.Tags.Remove(entity);
+            context.SaveChanges();
 
-            //foreach (var entity in context.Creatures)
-            //    context.Creatures.Remove(entity);
-            //context.SaveChanges();
+            foreach (var entity in context.Creatures)
+                context.Creatures.Remove(entity);
+            context.SaveChanges();
 
-            //foreach (var entity in context.Subcategories)
-            //    context.Subcategories.Remove(entity);
-            //context.SaveChanges();
+            foreach (var entity in context.Subcategories)
+                context.Subcategories.Remove(entity);
+            context.SaveChanges();
 
-            //foreach (var entity in context.Categories)
-            //    context.Categories.Remove(entity);
-            //context.SaveChanges();
+            foreach (var entity in context.Categories)
+                context.Categories.Remove(entity);
+            context.SaveChanges();
 
-            context.Database.EnsureCreated();
+            context.Database.Migrate();
 
             if (context.Categories.Any())
             {
