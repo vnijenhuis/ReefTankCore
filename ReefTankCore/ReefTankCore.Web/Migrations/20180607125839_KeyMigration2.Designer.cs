@@ -13,9 +13,10 @@ using System;
 namespace ReefTankCore.Web.Migrations
 {
     [DbContext(typeof(ReefContext))]
-    partial class ReefContextModelSnapshot : ModelSnapshot
+    [Migration("20180607125839_KeyMigration2")]
+    partial class KeyMigration2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -13,9 +13,10 @@ using System;
 namespace ReefTankCore.Web.Migrations
 {
     [DbContext(typeof(ReefContext))]
-    partial class ReefContextModelSnapshot : ModelSnapshot
+    [Migration("20180607123753_KeyMigration")]
+    partial class KeyMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,16 +127,15 @@ namespace ReefTankCore.Web.Migrations
 
             modelBuilder.Entity("ReefTankCore.Models.Base.CreatureReference", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
                     b.Property<Guid>("CreatureId");
 
                     b.Property<Guid>("ReferenceId");
 
-                    b.HasKey("Id");
+                    b.Property<Guid>("Id");
 
-                    b.HasIndex("CreatureId");
+                    b.HasKey("CreatureId", "ReferenceId");
+
+                    b.HasAlternateKey("Id");
 
                     b.HasIndex("ReferenceId");
 
@@ -144,16 +144,15 @@ namespace ReefTankCore.Web.Migrations
 
             modelBuilder.Entity("ReefTankCore.Models.Base.CreatureTag", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
                     b.Property<Guid>("CreatureId");
 
                     b.Property<Guid>("TagId");
 
-                    b.HasKey("Id");
+                    b.Property<Guid>("Id");
 
-                    b.HasIndex("CreatureId");
+                    b.HasKey("CreatureId", "TagId");
+
+                    b.HasAlternateKey("Id");
 
                     b.HasIndex("TagId");
 
