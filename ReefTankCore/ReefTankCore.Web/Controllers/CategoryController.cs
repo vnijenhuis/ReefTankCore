@@ -14,7 +14,7 @@ using ReefTankCore.Web.Models;
 namespace ReefTankCore.Web.Controllers
 {
     [AllowAnonymous]
-    public class CategoryController : Controller
+    public class CategoryController : BaseController
     {
         private readonly ICategoryRepository _categoryRepository;
 

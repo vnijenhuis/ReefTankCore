@@ -16,7 +16,7 @@ using ReefTankCore.Web.Models;
 namespace ReefTankCore.Web.Controllers
 {
     [AllowAnonymous]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly IReefService _reefService;
 

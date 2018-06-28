@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ReefTankCore.Models.Base;
 using ReefTankCore.Models.Enums;
+using ReefTankCore.Web.Areas.Admin.Models;
 using ReefTankCore.Web.Areas.Admin.Models.Creatures;
 
 namespace ReefTankCore.Web.Models

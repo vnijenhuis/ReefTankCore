@@ -13,24 +13,28 @@ using ReefTankCore.Web.Models;
 namespace ReefTankCore.Web.Controllers
 {
     [AllowAnonymous]
-    public class SubcategoryController : Controller
+    public class SubcategoryController : BaseController
     {
         private readonly ISubcategoryRepository _subcategoryRepository;
-        public SubcategoryController(ISubcategoryRepository subcategoryRepository)
+        private readonly ICreatureRepository _creatureRepository;
+        public SubcategoryController(ISubcategoryRepository subcategoryRepository, ICreatureRepository creatureRepository)
         {
             _subcategoryRepository = subcategoryRepository;
+            _creatureRepository = creatureRepository;
         }
 
         public IActionResult Index(Guid id)
         {
             var subcategory = _subcategoryRepository.GetSubcategory(id);
+            var creatures = _creatureRepository.GetCreaturesBySubcategory(subcategory);
+
             var vm = new SubcategoryViewModel()
             {
                 Id = subcategory.Id,
                 CommonName = subcategory.CommonName,
                 ScientificName = subcategory.ScientificName,
                 Description = subcategory.Description,
-                Creatures = Mapper.Map<IEnumerable<Creature>, IList<CreatureViewModel>>(subcategory.Creatures),
+                Creatures = Mapper.Map<IEnumerable<Creature>, IList<CreatureViewModel>>(creatures),
             };
             return View(vm);
         }

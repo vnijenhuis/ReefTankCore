@@ -48,7 +48,16 @@ namespace ReefTankCore.Web
                 .ForMember(x => x.SubcategoryId, opt => opt.MapFrom(x => x.Subcategory.Id))
                 .ForMember(x => x.CategoryId, opt => opt.MapFrom(x => x.Subcategory.Category.Id))
                 .ForMember(x => x.CategoryName, opt => opt.MapFrom(x => x.Subcategory.Category.Name));
-            CreateMap<Creature, CreatureViewModel>();
+            CreateMap<Creature, CreatureViewModel>()
+                .ForMember(x => x.ContentUrl, opt => opt.MapFrom(x => x.Media.Url + x.Media.Filename))
+                .ForMember(x => x.ReefCompatabilityItems, opt => opt.Ignore())
+                .ForMember(x => x.TemperamentItems, opt => opt.Ignore())
+                .ForMember(x => x.SpecialRequirementItems, opt => opt.Ignore())
+                .ForMember(x => x.DifficultyItems, opt => opt.Ignore())
+                .ForMember(x => x.SubcategoryItems, opt => opt.Ignore())
+                .ForMember(x => x.SubcategoryId, opt => opt.MapFrom(x => x.Subcategory.Id))
+                .ForMember(x => x.CategoryId, opt => opt.MapFrom(x => x.Subcategory.Category.Id))
+                .ForMember(x => x.CategoryName, opt => opt.MapFrom(x => x.Subcategory.Category.Name));
 
             //MEDIA
             CreateMap<Media, MediaViewModel>()
