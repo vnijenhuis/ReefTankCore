@@ -49,7 +49,7 @@ namespace ReefTankCore.Web
                 .ForMember(x => x.CategoryId, opt => opt.MapFrom(x => x.Subcategory.Category.Id))
                 .ForMember(x => x.CategoryName, opt => opt.MapFrom(x => x.Subcategory.Category.Name));
             CreateMap<Creature, CreatureViewModel>()
-                .ForMember(x => x.ContentUrl, opt => opt.MapFrom(x => x.Media.Url + x.Media.Filename))
+                .ForMember(x => x.FileName, opt => opt.MapFrom(x => x.Media.Url + x.Media.Filename))
                 .ForMember(x => x.ReefCompatabilityItems, opt => opt.Ignore())
                 .ForMember(x => x.TemperamentItems, opt => opt.Ignore())
                 .ForMember(x => x.SpecialRequirementItems, opt => opt.Ignore())
