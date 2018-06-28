@@ -1,0 +1,38 @@
+﻿@model CreatureViewModel
+
+@{
+    ViewData["Title"] = "Category";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12" data-category="view">
+            <div class="lib-panel">
+                <div class="row box-shadow">
+                    <div class="col-md-3 no-padding">
+                        <img src="@Url.Content(!string.IsNullOrEmpty(Model.FileName) ? "~" + Model.FileName : "~/images/Placeholders/270x270.png")" alt="Image Placeholder" />
+                    </div>
+                    <div class="col-md-8">
+                        <div class="lib-row lib-header">
+                            @Model.Genus @Model.Species - @Model.CommonName
+                            <div class="lib-header-seperator"></div>
+                        </div>
+                        <div class="lib-row lib-desc">
+                            @Html.Raw(Model.Description)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                Informatie
+            </div>
+            <div class="panel">
+                Labels
+            </div>
+        </div>
+    </div>
+</div>
