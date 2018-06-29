@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ReefTankCore.Web.Areas.SystemOwner.Controllers
 {
-    [Area("Admin"), Authorize(Policy = "SystemOwner")]
+    [Area("SystemOwner"), Authorize(Policy = "SystemOwner")]
     public class SystemController : Controller
     {
     }

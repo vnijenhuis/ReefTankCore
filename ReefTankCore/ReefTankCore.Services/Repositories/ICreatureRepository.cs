@@ -17,5 +17,6 @@ namespace ReefTankCore.Services.Repositories
         void SaveCreatureTagAsync(CreatureTag creatureTag);
         void SaveCreatureReference(CreatureReference creatureReference);
         void DeleteCreatureTag(CreatureTag tag);
+        Task<IEnumerable<Creature>> GetCreaturesAsync();
     }
 }

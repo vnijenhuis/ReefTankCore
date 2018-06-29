@@ -83,6 +83,7 @@
     <Folder Include="Areas\SystemOwner\Data\" />
     <Folder Include="Connected Services\" />
     <Folder Include="Resources\" />
+    <Folder Include="wwwroot\images\Creatures\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -17,6 +17,11 @@ namespace ReefTankCore.Services.Repositories
             _baseRepository = baseRepository;
         }
 
+        public IEnumerable<Category> GetCategories()
+        {
+            return _baseRepository.Context.Categories.BuildCategory();
+        }
+
         public Category GetCategory(Guid id)
         {
             return _baseRepository.Context.Categories

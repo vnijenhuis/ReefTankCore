@@ -2,19 +2,47 @@
 
 @{
     ViewBag.Title = "title";
-    Layout = "_Layout";
+    Layout = "~/Areas/SystemOwner/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Gebruikers</h2>
-<div class="album text-muted">
+<div class="container">
     <div class="row">
-        <div class="container">
-            @foreach (var subcategory in Model.Users)
-            {
-            }
+        <div class="panel panel-info top-buffer">
+            <div class="panel-heading">
+                <h2>Gebruikers</h2>
+                <div>
+                    @{Html.RenderPartial("MessageBox");}
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Firstname</th>
+                            <th>Surname</th>
+                            <th>EmailAddres</th>
+                            <th>Active</th>
+                            <th>Locked</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.Users)
+                        {
+                            <tr>
+                                <td>@user.Firstname </td>
+                                <td>@user.Surname </td>
+                                <td>@user.EmailAddres </td>
+                                <td>@Html.Raw(user.EmailConfirmed ? "<i class='material-icons md-21'>done</i>" : "<i class='material-icons md-21'>clear</i>")</td>
+                                <td>@Html.Raw(user.LockoutEnabled ? "<i class='material-icons md-21'>lock</i>" : "<i class='material-icons md-21'>lock_open</i>")</td>
+                                <td>
+                                    <a href="@Url.Action("Edit", "User", new {Area = "Admin", id = user.Id})"><i class="material-icons md-21">edit</i></a>
+                                    <a href="@Url.Action("Delete","User", new {Area = "Admin", id = user.Id})"><i class="material-icons md-21">delete</i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
-<div class="row">
-    
 </div>

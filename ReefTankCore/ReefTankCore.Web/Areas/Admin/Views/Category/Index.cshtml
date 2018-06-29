@@ -6,31 +6,33 @@
 
 
 <div class="container">
-    <div class="panel panel-info top-buffer">
-        <div class="panel-heading">
-            <h2>List of categories</h2>
-        </div>
-        <div class="panel-body">
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Subcategories</th>
-                    <th>Options</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach (var category in Model.Categories)
-                {
+    <div class="row">
+        <div class="panel panel-info top-buffer">
+            <div class="panel-heading">
+                <h2>List of categories</h2>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <thead>
                     <tr>
-                        <td>@category.Name</td>
-                        <td>@category.SubcategoryCount</td>
-                        <td><a href="@Url.Action("Edit", "Category", new {Area = "Admin", id = category.Id})"><i class="material-icons md-21">edit</i></a>
-                            <a href="@Url.Action("Index", "Subcategory", new {Area = "Admin", id = category.Id})"><i class="material-icons md-21">info</i></a></td>
+                        <th>Name</th>
+                        <th>Subcategories</th>
+                        <th>Options</th>
                     </tr>
-                }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <tr>
+                            <td>@category.Name</td>
+                            <td>@category.SubcategoryCount</td>
+                            <td><a href="@Url.Action("Edit", "Category", new {Area = "Admin", id = category.Id})"><i class="material-icons md-21">edit</i></a>
+                                <a href="@Url.Action("Index", "Subcategory", new {Area = "Admin", id = category.Id})"><i class="material-icons md-21">info</i></a></td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
+    </div> 
 </div>

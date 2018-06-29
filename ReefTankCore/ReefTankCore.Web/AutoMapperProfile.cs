@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using ReefTankCore.Models.Base;
+using ReefTankCore.Models.Users;
 using ReefTankCore.Web.Areas.Admin.Models;
 using ReefTankCore.Web.Areas.Admin.Models.Categories;
 using ReefTankCore.Web.Areas.Admin.Models.Creatures;
 using ReefTankCore.Web.Areas.Admin.Models.Subcategories;
+using ReefTankCore.Web.Areas.SystemOwner.Models;
 using ReefTankCore.Web.Models;
 
 namespace ReefTankCore.Web
@@ -63,6 +65,10 @@ namespace ReefTankCore.Web
             CreateMap<Media, MediaViewModel>()
                 .ForMember(x => x.ContentUrl , opt => opt.MapFrom(x => x.Url + x.Filename));
 
+            //USERS
+            CreateMap<User, UserViewModel>()
+                .ForMember(x => x.EmailAddres, opt => opt.MapFrom(x => x.Email))
+                .ForMember(x => x.LockoutEnabled, opt => opt.MapFrom(x => x.LockoutEnabled));
         }
     }
 }
