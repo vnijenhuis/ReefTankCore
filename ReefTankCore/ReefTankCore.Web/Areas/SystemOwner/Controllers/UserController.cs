@@ -31,5 +31,15 @@ namespace ReefTankCore.Web.Areas.SystemOwner.Controllers
 
             return View(vm);
         }
+
+        public IActionResult Edit(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IActionResult Delete(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

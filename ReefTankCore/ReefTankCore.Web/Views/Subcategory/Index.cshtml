@@ -30,7 +30,7 @@
         @foreach (var creature in Model.Creatures)
         {
             <div class="card">
-                <a href="@Url.Action("Index", "Creature", new {Area = "", id = Model.Id })">
+                <a href="@Url.Action("Index", "Creature", new {Area = "", id = creature.Id })">
                     <div class="logo-image">
                         @if (!string.IsNullOrEmpty(creature.FileName))
                         {

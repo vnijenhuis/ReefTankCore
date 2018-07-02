@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ReefTankCore.Models.Base;
 using ReefTankCore.Services.Context;
+using ReefTankCore.Services.Repositories;
 using ReefTankCore.Web.Areas.Admin.Models.Categories;
 using ReefTankCore.Web.Areas.Admin.Models.Subcategories;
 
@@ -17,21 +18,20 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
 {
     public class CategoryController : AdminController
     {
-        //private const string Directory = "/images/Categories/";
-        private readonly IReefService _reefService;
         private readonly IMediaService _mediaService;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public CategoryController(IReefService reefService, IMediaService mediaService)
+        public CategoryController(IMediaService mediaService, ICategoryRepository categoryRepository)
         {
-            _reefService = reefService;
             _mediaService = mediaService;
+            _categoryRepository = categoryRepository;
         }
 
         [HttpGet]
         [Route("Category/Index")]
         public IActionResult Index()
         {
-            var categories = _reefService.GetCategories();
+            var categories = _categoryRepository.FindAll();
             var vm = new CategoryOverviewModel()
             {
                 Categories = Mapper.Map<IEnumerable<Category>, IList<CategoryIndexModel>>(categories),
@@ -42,7 +42,7 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Edit(Guid id)
         {
-            var category = _reefService.GetCategory(id);
+            var category = _categoryRepository.GetCategory(id);
 
             var vm = Mapper.Map<Category, CategoryEditViewModel>(category);
 
@@ -54,7 +54,7 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var category = _reefService.GetCategory(model.Id);
+                var category = _categoryRepository.GetCategory(model.Id);
                 category.Description = model.Description;
                 category.Name = model.Name;
 
@@ -76,7 +76,7 @@ namespace ReefTankCore.Web.Areas.Admin.Controllers
                         category.MediaId = media.Id;
                     }
                 }
-                _reefService.SaveCategoryAsync(category);
+                _categoryRepository.Save(category);
                 return RedirectToAction("Index", "Category", new { Area = "Admin"});
             }
             return View(model);

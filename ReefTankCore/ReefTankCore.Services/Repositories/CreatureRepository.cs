@@ -31,6 +31,13 @@ namespace ReefTankCore.Services.Repositories
             return creatures;
         }
 
+        public async Task<IEnumerable<Creature>> GetCreaturesAsync()
+        {
+            var creatures = await _baseRepository.Context.Creatures.BuildCreature().ToListAsync();
+
+            return creatures;
+        }
+
         public Creature GetCreature(Guid id)
         {
             var creature = _baseRepository.Context.Creatures

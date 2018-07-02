@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using ReefTankCore.Models.Base;
 using ReefTankCore.Services;
 using ReefTankCore.Services.Context;
+using ReefTankCore.Services.Repositories;
 using ReefTankCore.Web.Data;
 using ReefTankCore.Web.Models;
 namespace ReefTankCore.Web.Controllers
@@ -18,16 +19,15 @@ namespace ReefTankCore.Web.Controllers
     [AllowAnonymous]
     public class HomeController : BaseController
     {
-        private readonly IReefService _reefService;
-
-        public HomeController(IReefService reefService)
+        private readonly ICategoryRepository _categoryRepository;
+        public HomeController(ICategoryRepository categoryRepository)
         {
-            _reefService = reefService;
+            _categoryRepository = categoryRepository;
         }
 
         public IActionResult Index()
         {
-            var categories = _reefService.GetCategories().ToList();
+            var categories = _categoryRepository.FindAll().ToList();
 
             var vm = Mapper.Map<IEnumerable<Category>, IList<CategoryViewModel>>(categories).OrderBy(x => x.Name);
 

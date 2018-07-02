@@ -8,5 +8,6 @@ namespace ReefTankCore.Services.Repositories
 {
     public interface ICreatureTagRepository : IRepository<CreatureTag>
     {
+        IEnumerable<CreatureTag> GetCreatureTags(Creature creature);
     }
 }

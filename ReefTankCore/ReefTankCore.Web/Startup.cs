@@ -46,7 +46,6 @@ namespace ReefTankCore.Web
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ITagRepository, TagRepository>();
             services.AddScoped<ICreatureTagRepository, CreatureTagRepository>();
-            services.AddScoped<IReefService, ReefService>();
             services.AddScoped<IMediaService, MediaService>();
             services.AddSingleton<IEnumService, EnumService>();
 
@@ -125,7 +124,8 @@ namespace ReefTankCore.Web
                 routes.MapRoute(
                     name: "areas",
                     template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
+                routes.MapRoute("system_route", "Admin/{controller=Home}/{action=Index}/{id?}",
+                    defaults: new { area = "SystemOwner" }, constraints: new { area = "SystemOwner" });
                 //routes.MapRoute(
                 //    name: "Admin_Category",
                 //    template: "Admin/Category/{action}/{slug?}");
